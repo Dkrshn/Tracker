@@ -12,6 +12,8 @@ final class CreateSchedule: UIViewController {
     private let tableView = UITableView()
     private let confirmButton = UIButton()
     private let dataForTable = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресение"]
+    let storage = Storage.shared
+    let viewCL = TrackerViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,11 +62,7 @@ extension CreateSchedule {
     
     @objc
     func confirmSchedule() {
-        let trakers = TrackerViewController()
-        let newTracker = Tracker(id: "\(trakers.trackers.count + 1)")
-        trakers.trackers.append(newTracker)
-        trakers.view.layoutIfNeeded()
-       // dismiss(animated: true)
+        viewCL.updateUI()
         UIView.animate(withDuration: 0.3) {
             guard let window = UIApplication.shared.windows.first else { return assertionFailure("Invalid Configuration") }
             let tabBarViewController = TabBarViewController()

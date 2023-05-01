@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A50E02972A00302A0082FF7A /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50E02962A00302A0082FF7A /* Storage.swift */; };
 		A550417F29F6D49E0075DA85 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A550417E29F6D49E0075DA85 /* UIColor.swift */; };
 		A550418129F6EB120075DA85 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A550418029F6EB120075DA85 /* TabBarViewController.swift */; };
 		A550418329F6EF7A0075DA85 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A550418229F6EF7A0075DA85 /* StatisticsViewController.swift */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A50E02962A00302A0082FF7A /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		A550417E29F6D49E0075DA85 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		A550418029F6EB120075DA85 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		A550418229F6EF7A0075DA85 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				A5CBE06F29FBBA9A002AA691 /* CreateSchedule.swift */,
+				A50E02962A00302A0082FF7A /* Storage.swift */,
 				A5CC245229FE6C7D00D4D03D /* TrackerCell.swift */,
 				A5C3B46129FA852A00B64F47 /* CreateHabitViewController.swift */,
 				A5C3B45F29FA56D600B64F47 /* CreateTracker.swift */,
@@ -201,6 +204,7 @@
 				A5C3B46229FA852A00B64F47 /* CreateHabitViewController.swift in Sources */,
 				A550418129F6EB120075DA85 /* TabBarViewController.swift in Sources */,
 				A550417F29F6D49E0075DA85 /* UIColor.swift in Sources */,
+				A50E02972A00302A0082FF7A /* Storage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

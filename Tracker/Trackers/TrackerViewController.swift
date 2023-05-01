@@ -15,17 +15,18 @@ class TrackerViewController: UIViewController {
     private let searchTextField  = TextField()
     private let datePicker = UIDatePicker()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    var trackers: [Tracker] = []
+    let storage = Storage.shared
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.YY"
         return formatter
     }()
     
-    
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .YPWhiteDay
+        
         makeUI()
         searchTextField.delegate = self
         collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "cellCollection")
@@ -36,11 +37,13 @@ class TrackerViewController: UIViewController {
 
 extension TrackerViewController {
     func makeUI() {
+        let newTracker1 = Tracker(id: "\(storage.trackers.count + 1)")
+        storage.trackers.append(newTracker1)
         
         searchTextField.setUpTextField()
         
         guard let navBar = navigationController?.navigationBar else { return }
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTracker))
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(updateUI))//addTracker))
         let date = UIBarButtonItem(customView: datePicker)
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
@@ -50,36 +53,97 @@ extension TrackerViewController {
         addButton.tintColor = .YPBlackDay
         addButton.width = 19
         
-        let allUIElements = [emptyImage, emptyLable, header, searchTextField, datePicker, collectionView]
-        allUIElements.forEach({view.addSubview($0)})
-        allUIElements.forEach({$0.translatesAutoresizingMaskIntoConstraints = false})
-        emptyImage.image = UIImage(named: "emptyTracker")
+        if storage.trackers.isEmpty {
+            let allUIElements = [emptyImage, emptyLable, header, searchTextField, datePicker]
+            allUIElements.forEach({view.addSubview($0)})
+            allUIElements.forEach({$0.translatesAutoresizingMaskIntoConstraints = false})
+            emptyImage.image = UIImage(named: "emptyTracker")
+            
+            emptyLable.text = "Что будем отслеживать?"
+            emptyLable.font = UIFont.systemFont(ofSize: 12)
+            emptyLable.tintColor = .YPBlackDay
+            
+            header.text = "Трекеры"
+            header.font = UIFont.boldSystemFont(ofSize: 34)
+            header.tintColor = .YPBlackDay
+            
+            
+            NSLayoutConstraint.activate([
+                emptyImage.topAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 366),
+                emptyImage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+                emptyLable.centerXAnchor.constraint(equalTo: emptyImage.centerXAnchor),
+                emptyLable.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8),
+                header.leadingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+                header.topAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 44),
+                searchTextField.leadingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+                searchTextField.topAnchor.constraint(lessThanOrEqualTo: header.bottomAnchor, constant: 7),
+                searchTextField.heightAnchor.constraint(equalToConstant: 36),
+                searchTextField.widthAnchor.constraint(equalToConstant: view.frame.width - 16*2)
+            ])
+        } else {
+            let allUIElements = [header, searchTextField, datePicker, collectionView]
+            allUIElements.forEach({view.addSubview($0)})
+            allUIElements.forEach({$0.translatesAutoresizingMaskIntoConstraints = false})
+
+            
+            header.text = "Трекеры"
+            header.font = UIFont.boldSystemFont(ofSize: 34)
+            header.tintColor = .YPBlackDay
+            
+            
+            NSLayoutConstraint.activate([
+                header.leadingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+                header.topAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 44),
+                searchTextField.leadingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+                searchTextField.topAnchor.constraint(lessThanOrEqualTo: header.bottomAnchor, constant: 7),
+                searchTextField.heightAnchor.constraint(equalToConstant: 36),
+                searchTextField.widthAnchor.constraint(equalToConstant: view.frame.width - 16*2),
+                collectionView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 24),
+                collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+                collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+                collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 50)
+            ])
+        }
         
-        emptyLable.text = "Что будем отслеживать?"
-        emptyLable.font = UIFont.systemFont(ofSize: 12)
-        emptyLable.tintColor = .YPBlackDay
-        
-        header.text = "Трекеры"
-        header.font = UIFont.boldSystemFont(ofSize: 34)
-        header.tintColor = .YPBlackDay
-        
-        
-        NSLayoutConstraint.activate([
-            emptyImage.topAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 366),
-            emptyImage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
-            emptyLable.centerXAnchor.constraint(equalTo: emptyImage.centerXAnchor),
-            emptyLable.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8),
-            header.leadingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            header.topAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 44),
-            searchTextField.leadingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            searchTextField.topAnchor.constraint(lessThanOrEqualTo: header.bottomAnchor, constant: 7),
-            searchTextField.heightAnchor.constraint(equalToConstant: 36),
-            searchTextField.widthAnchor.constraint(equalToConstant: view.frame.width - 16*2),
-            collectionView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 24),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 50)
-        ])
+//        let allUIElements = [emptyImage, emptyLable, header, searchTextField, datePicker, collectionView]
+//        allUIElements.forEach({view.addSubview($0)})
+//        allUIElements.forEach({$0.translatesAutoresizingMaskIntoConstraints = false})
+//        emptyImage.image = UIImage(named: "emptyTracker")
+//
+//        emptyLable.text = "Что будем отслеживать?"
+//        emptyLable.font = UIFont.systemFont(ofSize: 12)
+//        emptyLable.tintColor = .YPBlackDay
+//
+//        header.text = "Трекеры"
+//        header.font = UIFont.boldSystemFont(ofSize: 34)
+//        header.tintColor = .YPBlackDay
+//
+//
+//        NSLayoutConstraint.activate([
+//            emptyImage.topAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 366),
+//            emptyImage.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+//            emptyLable.centerXAnchor.constraint(equalTo: emptyImage.centerXAnchor),
+//            emptyLable.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8),
+//            header.leadingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+//            header.topAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 44),
+//            searchTextField.leadingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+//            searchTextField.topAnchor.constraint(lessThanOrEqualTo: header.bottomAnchor, constant: 7),
+//            searchTextField.heightAnchor.constraint(equalToConstant: 36),
+//            searchTextField.widthAnchor.constraint(equalToConstant: view.frame.width - 16*2),
+//            collectionView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 24),
+//            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+//            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+//            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 50)
+//        ])
+    }
+    @objc
+    func updateUI() {
+        let newTracker = Tracker(id: "\(storage.trackers.count + 1)")
+        let nextIndex = storage.trackers.count
+        storage.trackers.append(newTracker)
+        collectionView.performBatchUpdates({
+            collectionView.insertItems(at: [IndexPath(row: nextIndex, section: 0)])
+        })
     }
 }
 
@@ -100,17 +164,23 @@ extension TrackerViewController: UITextFieldDelegate {
             self.view.layoutIfNeeded()
         }
     }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.3) {
+            self.searchTextField.widthAnchor.constraint(equalToConstant: self.view.frame.width - 16*2)
+            self.view.layoutIfNeeded()
+        }
+    }
 }
 
 extension TrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-           return 2
+        return storage.trackers.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellCollection", for: indexPath) as? TrackerCell
        cell?.contentView.backgroundColor = .YPRed
-       cell?.textLabel.text = "Тест"
+        cell?.textLabel.text = "\(storage.trackers[indexPath.row].id)"
         return cell!
     }
 }

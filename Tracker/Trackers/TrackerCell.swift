@@ -13,7 +13,7 @@ final class TrackerCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        textLabel.addSubview(textLabel)
+        contentView.addSubview(textLabel)
         textLabel.translatesAutoresizingMaskIntoConstraints = false
         
        

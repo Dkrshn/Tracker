@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CreateTracker: UIViewController {
+final class CreateTrackerViewController: UIViewController {
     private let headerLabel = UILabel()
     private let habitButton = UIButton()
     private let unregularEventButton = UIButton()
@@ -18,7 +18,7 @@ final class CreateTracker: UIViewController {
     }
 }
 
-extension CreateTracker {
+extension CreateTrackerViewController {
     func makeUI() {
         view.backgroundColor = .YPWhiteDay
         

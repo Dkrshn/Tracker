@@ -7,24 +7,32 @@
 
 import UIKit
 
-final class CreateSchedule: UIViewController {
+protocol WeekdayCellDelegate: AnyObject {
+    func didToggleSwitchView(to isSelected: Bool, day: String)
+}
+
+final class CreateScheduleViewController: UIViewController {
+    
+    
     private let headerLabel = UILabel()
     private let tableView = UITableView()
     private let confirmButton = UIButton()
     private let dataForTable = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресение"]
-    let storage = Storage.shared
-    let viewCL = TrackerViewController()
+    private let weekDay = ["Понедельник":"Пн", "Вторник":"Вт", "Среда":"Ср", "Четверг":"Чт", "Пятница":"Пт", "Суббота":"Сб", "Воскресение":"Вс"]
+    var schedule = [String]()
+    static let shared = CreateScheduleViewController()
+    weak var delegate: CreateScheduleDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         makeUI()
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellSchedule")
+        tableView.register(DayCell.self, forCellReuseIdentifier: "cellSchedule")
     }
 }
 
-extension CreateSchedule {
+extension CreateScheduleViewController {
     func makeUI() {
         view.backgroundColor = .YPWhiteDay
         
@@ -50,7 +58,7 @@ extension CreateSchedule {
             headerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13),
             confirmButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            confirmButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16),
+            confirmButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
             confirmButton.widthAnchor.constraint(equalToConstant: 335),
             confirmButton.heightAnchor.constraint(equalToConstant: 60),
             tableView.widthAnchor.constraint(equalToConstant: 343),
@@ -62,27 +70,21 @@ extension CreateSchedule {
     
     @objc
     func confirmSchedule() {
-        viewCL.updateUI()
-        UIView.animate(withDuration: 0.3) {
-            guard let window = UIApplication.shared.windows.first else { return assertionFailure("Invalid Configuration") }
-            let tabBarViewController = TabBarViewController()
-            window.rootViewController = tabBarViewController
-        }
+        delegate?.createScheduleTracker(schedule: schedule)
+        dismiss(animated: true)
     }
 }
 
-extension CreateSchedule: UITableViewDataSource {
+extension CreateScheduleViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         dataForTable.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cellSchedule", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellSchedule", for: indexPath) as! DayCell
         cell.textLabel?.text = dataForTable[indexPath.row]
         cell.backgroundColor = .YPBackgroundDay
-        let switchView = UISwitch(frame: .zero)
-        switchView.onTintColor = .YPBlue
-        cell.accessoryView = switchView
+        cell.delegate = self
         if indexPath.row == dataForTable.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         } else {
@@ -90,12 +92,26 @@ extension CreateSchedule: UITableViewDataSource {
         }
         return cell
     }
-    
-    
 }
 
-extension CreateSchedule: UITableViewDelegate {
+extension CreateScheduleViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+extension CreateScheduleViewController: WeekdayCellDelegate {
+    func didToggleSwitchView(to isSelected: Bool, day: String) {
+        guard let day = weekDay[day] else { return }
+        if isSelected {
+            schedule.append(day)
+        } else {
+            if let index = schedule.firstIndex(of: day) {
+                schedule.remove(at: index)
+            }
+        }
     }
 }

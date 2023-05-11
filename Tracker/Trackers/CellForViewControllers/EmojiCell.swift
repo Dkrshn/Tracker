@@ -1,14 +1,15 @@
 //
-//  TrackerCell.swift
+//  EmojiCell.swift
 //  Tracker
 //
-//  Created by Даниил Крашенинников on 30.04.2023.
+//  Created by Даниил Крашенинников on 05.05.2023.
 //
 
 import UIKit
 
-final class TrackerCell: UICollectionViewCell {
+final class EmojiCell: UICollectionViewCell {
     let textLabel = UILabel()
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)

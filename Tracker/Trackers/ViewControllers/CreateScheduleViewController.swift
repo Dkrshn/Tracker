@@ -47,7 +47,6 @@ extension CreateScheduleViewController {
         tableView.layer.cornerRadius = 10
         tableView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMinXMinYCorner]
         
-        
         confirmButton.backgroundColor = .YPBlackDay
         confirmButton.setTitle("Готово", for: .normal)
         confirmButton.setTitleColor(.YPWhiteDay, for: .normal)

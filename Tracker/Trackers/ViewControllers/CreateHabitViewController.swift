@@ -38,6 +38,7 @@ final class CreateHabitViewController: UIViewController {
     private var category = ""
     private var visibleDay = ""
     private var nameHabit = ""
+    private var finalSchedule = [WeekDay]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +65,6 @@ extension CreateHabitViewController {
         
         let uiElementOnGeneralView = [headerLabel, scrollView]
         let uiElementsOnContentView = [nameTextField, cancelButton, createButton, tableForCreateHabit, collectionView]
-        
         
         scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
@@ -108,8 +108,6 @@ extension CreateHabitViewController {
         collectionView.isScrollEnabled = false
         
         NSLayoutConstraint.activate([
-        // scrollView.heightAnchor.constraint(equalToConstant: 600),
-           // scrollView.widthAnchor.constraint(equalToConstant: view.frame.width),
             scrollView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 14),
             scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
@@ -136,11 +134,9 @@ extension CreateHabitViewController {
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -46),
             collectionView.heightAnchor.constraint(equalToConstant: 500),
             cancelButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 30),
-           // cancelButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -37),
             cancelButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             cancelButton.widthAnchor.constraint(equalToConstant: 161),
             cancelButton.heightAnchor.constraint(equalToConstant: 60),
-           // createButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -37),
             createButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 30),
             createButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             createButton.widthAnchor.constraint(equalToConstant: 161),
@@ -158,8 +154,7 @@ extension CreateHabitViewController {
         nameHabit = text
         guard let selectedEmoji = selectedEmoji else { return }
         guard let selectedColor = selectedColor else { return }
-        storage.addNewTracker(name: nameHabit, emoji: selectedEmoji, color: selectedColor, schedule: visibleDay, category: category)
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\(nameHabit), \(selectedEmoji), \(selectedColor), \(visibleDay)")
+        storage.addNewTracker(name: nameHabit, emoji: selectedEmoji, color: selectedColor, schedule: finalSchedule, category: category)
         dismiss(animated: true, completion: nil)
         UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut]) {
             guard let window = UIApplication.shared.windows.first else { return assertionFailure("Invalid Configuration") }
@@ -240,6 +235,19 @@ extension CreateHabitViewController: UITableViewDelegate {
 extension CreateHabitViewController: CreateScheduleDelegate {
     func createScheduleTracker(schedule: [String]) {
         visibleDay = schedule.joined(separator: ", ")
+        for i in schedule {
+            switch i {
+            case "Пн": finalSchedule.append(WeekDay.monday)
+            case "Вт": finalSchedule.append(WeekDay.tuesday)
+            case "Ср": finalSchedule.append(WeekDay.wednesday)
+            case "Чт": finalSchedule.append(WeekDay.thursday)
+            case "Пт": finalSchedule.append(WeekDay.friday)
+            case "Сб": finalSchedule.append(WeekDay.saturday)
+            case "Вс": finalSchedule.append(WeekDay.sunday)
+            default: break
+            }
+        }
+        
         tableForCreateHabit.reloadData()
     }
 }
@@ -253,9 +261,9 @@ extension CreateHabitViewController: CreateCategoryDelegate {
 
 extension CreateHabitViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            textField.resignFirstResponder()
-            return true
-        }
+        textField.resignFirstResponder()
+        return true
+    }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         guard let text = textField.text else { return true }
@@ -268,7 +276,7 @@ extension CreateHabitViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0: return emodji.count
@@ -323,7 +331,6 @@ extension CreateHabitViewController: UICollectionViewDelegateFlowLayout {
             cell.layer.cornerRadius = 16
             selectedEmoji = cell.textLabel.text
         case 1: let cell = collectionView.cellForItem(at: indexPath)
-           // cell?.layer.cornerRadius = 8
             cell?.layer.borderWidth = 3
             cell?.layer.borderColor = UIColor.YPWhiteDay.cgColor
             selectedColor = cell?.backgroundColor
@@ -361,59 +368,13 @@ extension CreateHabitViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-            
-            let indexPath = IndexPath(row: 0, section: section)
-            let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
-            
-            return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
-                                                             height: UIView.layoutFittingExpandedSize.height),
-                                                             withHorizontalFittingPriority: .required,
-                                                             verticalFittingPriority: .fittingSizeLevel)
-        }
-}
-
-class SupplementaryViewEmojiColor: UICollectionReusableView {
-    let titleLabel = UILabel()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
         
-        addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        let indexPath = IndexPath(row: 0, section: section)
+        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
         
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 32),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -36),
-        ])
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
+                                                         height: UIView.layoutFittingExpandedSize.height),
+                                                  withHorizontalFittingPriority: .required,
+                                                  verticalFittingPriority: .fittingSizeLevel)
     }
 }
-
-//        NSLayoutConstraint.activate([
-//            headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13),
-//            headerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            nameTextField.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 38),
-//            nameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            nameTextField.widthAnchor.constraint(equalToConstant: 343),
-//            nameTextField.heightAnchor.constraint(equalToConstant: 75),
-//            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-//            cancelButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-//            cancelButton.widthAnchor.constraint(equalToConstant: 161),
-//            cancelButton.heightAnchor.constraint(equalToConstant: 60),
-//            createButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-//            createButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-//            createButton.widthAnchor.constraint(equalToConstant: 161),
-//            createButton.heightAnchor.constraint(equalToConstant: 60),
-//            tableForCreateHabit.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            tableForCreateHabit.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24),
-//            tableForCreateHabit.widthAnchor.constraint(equalToConstant: 343),
-//            tableForCreateHabit.heightAnchor.constraint(equalToConstant: 150),
-//            collectionView.topAnchor.constraint(equalTo: tableForCreateHabit.bottomAnchor),
-//            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-//            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-//            collectionView.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -46)
-//        ])

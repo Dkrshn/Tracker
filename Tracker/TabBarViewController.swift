@@ -13,20 +13,13 @@ class TabBarViewController: UITabBarController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-
         
         let trackerViewController = TrackerViewController()
-        
-        
-        
         trackerViewController.tabBarItem = UITabBarItem(title: "Трекер", image: UIImage(named: "barItemTracker"), selectedImage: nil)
         
         let statisticsViewController = StatisticsViewController()
-        
         statisticsViewController.tabBarItem = UITabBarItem(title: "Статистика", image: UIImage(named: "barItemStatistics"), selectedImage: nil)
         
-            self.viewControllers = [trackerViewController, statisticsViewController]
-        
+        self.viewControllers = [trackerViewController, statisticsViewController]
     }
-    
 }

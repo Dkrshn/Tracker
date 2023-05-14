@@ -10,9 +10,9 @@ import UIKit
 final class CreateHabitCell: UITableViewCell {
     let firstLabel = UILabel()
     let secondaryLabel = UILabel()
-    
+     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-            super.init(style: style, reuseIdentifier: "cellCustom")
+        super.init(style: style, reuseIdentifier: "cellCustom")
         firstLabel.translatesAutoresizingMaskIntoConstraints = false
         secondaryLabel.translatesAutoresizingMaskIntoConstraints = false
         
@@ -32,7 +32,7 @@ final class CreateHabitCell: UITableViewCell {
             secondaryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16)
         ])
         
-        }
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

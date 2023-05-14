@@ -21,7 +21,6 @@ class TrackerViewController: UIViewController {
     private var visibleTrackerCategories = [TrackerCategory]()
     private var completedTracker = [TrackerRecord]()
     private let createHabit = CreateHabitViewController.shared
-  //  var currentDate: Date
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -33,6 +32,7 @@ class TrackerViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .YPWhiteDay
         categories = storage.storageTrakerCategory
+        visibleTrackerCategories = categories
         collectionView.register(SupplementaryViewCategory.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         makeUI()
         searchTextField.delegate = self
@@ -48,19 +48,17 @@ extension TrackerViewController {
         
         searchTextField.setUpTextFieldOnTrackerView()
         
-        
         addTraker.addTarget(self, action: #selector(addTracker), for: .touchUpInside)
         addTraker.setImage(UIImage(systemName: "plus"), for: .normal)
         addTraker.sizeThatFits(CGSize(width: 19, height: 18))
         addTraker.tintColor = .YPBlackDay
-
+        
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
         datePicker.locale = Locale(identifier: "ru_Ru")
         datePicker.addTarget(self, action: #selector(dateChanget), for: .valueChanged)
         
-        
-        if categories.isEmpty {
+        if visibleTrackerCategories.isEmpty {
             let allUIElements = [emptyImage, emptyLable, header, searchTextField, datePicker, addTraker]
             allUIElements.forEach({view.addSubview($0)})
             allUIElements.forEach({$0.translatesAutoresizingMaskIntoConstraints = false})
@@ -73,7 +71,6 @@ extension TrackerViewController {
             header.text = "Трекеры"
             header.font = UIFont.boldSystemFont(ofSize: 34)
             header.tintColor = .YPBlackDay
-            
             
             NSLayoutConstraint.activate([
                 addTraker.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13),
@@ -95,12 +92,10 @@ extension TrackerViewController {
             let allUIElements = [header, searchTextField, datePicker, collectionView, addTraker]
             allUIElements.forEach({view.addSubview($0)})
             allUIElements.forEach({$0.translatesAutoresizingMaskIntoConstraints = false})
-
             
             header.text = "Трекеры"
             header.font = UIFont.boldSystemFont(ofSize: 34)
             header.tintColor = .YPBlackDay
-            
             
             NSLayoutConstraint.activate([
                 addTraker.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13),
@@ -119,7 +114,7 @@ extension TrackerViewController {
                 collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 50)
             ])
         }
-        }
+    }
 }
 
 extension TrackerViewController {
@@ -127,52 +122,89 @@ extension TrackerViewController {
     private func addTracker() {
         let createTracker = CreateTrackerViewController()
         present(createTracker, animated: true)
-            
     }
     
     @objc
     private func dateChanget() {
+        reloadVisibleCategories()
+    }
+    
+    private func reloadVisibleCategories() {
+        let calendar = Calendar.current
+        let filterWeekDay = calendar.component(.weekday, from: datePicker.date)
+        let filterText = (searchTextField.text ?? "").lowercased()
         visibleTrackerCategories = categories.map { category in
-            TrackerCategory(nameCategory: category.nameCategory, trakers: category.trakers)
+            TrackerCategory(nameCategory: category.nameCategory, trakers: category.trakers.filter { tracker in
+                let textCondition = filterText.isEmpty || tracker.name.lowercased().contains(filterText)
+                let dateCondotion = tracker.schedule?.contains { weekDay in
+                    weekDay.rawValue + 1 == filterWeekDay
+                } == true
+                return textCondition && dateCondotion
+            }
+            )
         }
+        collectionView.reloadData()
     }
 }
 
 extension TrackerViewController: UITextFieldDelegate {
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        UIView.animate(withDuration: 0.3) {
-            self.searchTextField.widthAnchor.constraint(equalToConstant: self.view.frame.width - 120).isActive = true
-            self.view.layoutIfNeeded()
-        }
-    }
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        UIView.animate(withDuration: 0.3) {
-            self.searchTextField.widthAnchor.constraint(equalToConstant: self.view.frame.width - 16*2)
-            self.view.layoutIfNeeded()
-        }
+    //    func textFieldDidBeginEditing(_ textField: UITextField) {
+    //        UIView.animate(withDuration: 0.3) {
+    //            self.searchTextField.widthAnchor.constraint(equalToConstant: self.view.frame.width - 120).isActive = true
+    //            self.view.layoutIfNeeded()
+    //        }
+    //    }
+    //    func textFieldDidEndEditing(_ textField: UITextField) {
+    //        UIView.animate(withDuration: 0.3) {
+    //            self.searchTextField.widthAnchor.constraint(equalToConstant: self.view.frame.width - 16*2)
+    //            self.view.layoutIfNeeded()
+    //        }
+    //    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        reloadVisibleCategories()
+        return true
     }
 }
 
 extension TrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categories.count
+        return visibleTrackerCategories[0].trakers.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellCollection", for: indexPath) as? TrackerCell else { return UICollectionViewCell() }
-        cell.name.text = "\(categories[indexPath.row].trakers.name)"
-        cell.emoji.text = "\(categories[indexPath.row].trakers.emoji)"
-        cell.backView.backgroundColor = categories[indexPath.row].trakers.color
-        cell.buttonPlus.backgroundColor = categories[indexPath.row].trakers.color
+        let tracker = visibleTrackerCategories[0].trakers[indexPath.row]
+        let isCompletedToday = isCompletedTrackerToday(id: tracker.id)
+        let countDay =  completedTracker.filter { $0.id == tracker.id }.count
+        if completedTracker.isEmpty {
+            cell.daytext.text = "0 дней"
+        } else {
+            cell.daytext.text = "\(countDay) дней"
+        }
+        cell.configTrackerCellButtonUI(tracker: tracker, isCompleted: isCompletedToday, indexPath: indexPath)
+        cell.delegate = self
+        cell.name.text = "\(visibleTrackerCategories[0].trakers[indexPath.row].name)"
+        cell.emoji.text = "\(visibleTrackerCategories[0].trakers[indexPath.row].emoji)"
+        cell.backView.backgroundColor = visibleTrackerCategories[0].trakers[indexPath.row].color
+        cell.buttonPlus.backgroundColor = visibleTrackerCategories[0].trakers[indexPath.row].color
         return cell
+    }
+    
+    private func isCompletedTrackerToday(id: UUID) -> Bool {
+        completedTracker.contains { trackerRecord in
+            let sameDay = Calendar.current.isDate(trackerRecord.date, inSameDayAs: datePicker.date)
+            return trackerRecord.id == id && sameDay
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         var id = "header"
         
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? SupplementaryViewCategory
-        view?.titleLabel.text = "\(categories[indexPath.row].nameCategory)"
+        view?.titleLabel.text = "\(visibleTrackerCategories[indexPath.row].nameCategory)"
         return view!
     }
 }
@@ -187,37 +219,30 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-            
-            let indexPath = IndexPath(row: 0, section: section)
-            let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
-            
-            return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
-                                                             height: UIView.layoutFittingExpandedSize.height),
-                                                             withHorizontalFittingPriority: .required,
-                                                             verticalFittingPriority: .fittingSizeLevel)
-        }
+        
+        let indexPath = IndexPath(row: 0, section: section)
+        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+        
+        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
+                                                         height: UIView.layoutFittingExpandedSize.height),
+                                                  withHorizontalFittingPriority: .required,
+                                                  verticalFittingPriority: .fittingSizeLevel)
+    }
 }
 
-class SupplementaryViewCategory: UICollectionReusableView {
-    let titleLabel = UILabel()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 19)
-        
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12),
-        ])
+extension TrackerViewController: TrackerCellDelegate {
+    func completeTracker(id: UUID, indexPath: IndexPath) {
+        let trackerRecord = TrackerRecord(id: id, date: datePicker.date)
+        completedTracker.append(trackerRecord)
+        collectionView.reloadItems(at: [indexPath])
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func uncompleteTracker(id: UUID, indexPath: IndexPath) {
+        completedTracker.removeAll { trackerRecord in
+            let sameDay = Calendar.current.isDate(trackerRecord.date, inSameDayAs: datePicker.date)
+            return trackerRecord.id == id && sameDay
+            collectionView.reloadItems(at: [indexPath])
+        }
     }
 }
 

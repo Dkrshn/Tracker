@@ -11,13 +11,13 @@ final class DayCell: UITableViewCell {
     let switchView = UISwitch(frame: .zero)
     var days = [String]()
     weak var delegate: WeekdayCellDelegate?
-    
+     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-            super.init(style: style, reuseIdentifier: "cellSchedule")
+        super.init(style: style, reuseIdentifier: "cellSchedule")
         switchView.onTintColor = .YPBlue
         accessoryView = switchView
         switchView.addTarget(self, action: #selector(didToggleSwitchView), for: .valueChanged)
-        }
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

@@ -20,13 +20,13 @@ final class Storage {
         if storageTrakerCategory.isEmpty {
             let newTracker = Tracker(id: uniqueId, name: name, emoji: emoji, color: color, schedule: schedule)
             trackers.append(newTracker)
-            let newTrackerCategory = TrackerCategory(nameCategory: "Важное", trakers: trackers)
+            let newTrackerCategory = TrackerCategory(nameCategory: "Важное", trackers: trackers)
             storageTrakerCategory.append(newTrackerCategory)
         } else {
             storageTrakerCategory.removeLast()
             let newTracker = Tracker(id: uniqueId, name: name, emoji: emoji, color: color, schedule: schedule)
             trackers.append(newTracker)
-            let newTrackerCategory = TrackerCategory(nameCategory: "Важное", trakers: trackers)
+            let newTrackerCategory = TrackerCategory(nameCategory: "Важное", trackers: trackers)
             storageTrakerCategory.append(newTrackerCategory)
         }
     }

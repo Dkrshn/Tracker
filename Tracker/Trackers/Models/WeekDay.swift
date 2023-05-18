@@ -7,16 +7,6 @@
 
 import Foundation
 
-//enum WeekDay {
-//    case monday
-//    case tuesday
-//    case wednesday
-//    case thursday
-//    case friday
-//    case saturday
-//    case sunday
-//}
-
 enum WeekDay: Int {
     case monday =  1
     case tuesday = 2

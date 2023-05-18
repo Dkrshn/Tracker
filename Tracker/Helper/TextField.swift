@@ -21,7 +21,7 @@ final class TextField: UISearchTextField {
     func setUpTextFieldOnCreateTracker() {
         layer.cornerRadius = 10
         leftView = nil
-        layer.backgroundColor = UIColor.YPBackgroundDay.cgColor
+       // layer.backgroundColor = UIColor.YPBackgroundDay.cgColor
         textColor = .YPBlackDay
         clearButtonMode = .whileEditing
         placeholder = "Введите название трекера"

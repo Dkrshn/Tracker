@@ -64,10 +64,16 @@ extension CreateHabitViewController {
         view.backgroundColor = .YPWhiteDay
         
         let uiElementOnGeneralView = [headerLabel, scrollView]
-        let uiElementsOnContentView = [nameTextField, cancelButton, createButton, tableForCreateHabit, collectionView]
+        let uiElementsOnContentView = [nameTextField, tableForCreateHabit, collectionView]
         
         scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
+        
+        scrollView.addSubview(cancelButton)
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        scrollView.addSubview(createButton)
+        createButton.translatesAutoresizingMaskIntoConstraints = false
         
         scrollView.contentInsetAdjustmentBehavior = .never
         
@@ -82,11 +88,13 @@ extension CreateHabitViewController {
         
         nameTextField.layer.cornerRadius = 10
         nameTextField.leftView = nil
-        nameTextField.layer.backgroundColor = UIColor.YPBackgroundDay.cgColor
+       // nameTextField.layer.backgroundColor = UIColor.YPBackgroundDay.cgColor
+       // nameTextField.layer.backgroundColor = CGColor(srgbRed: 230, green: 232, blue: 235, alpha: 0.3)
         nameTextField.textColor = .YPBlackDay
         nameTextField.clearButtonMode = .whileEditing
         nameTextField.placeholder = "Введите название трекера"
         nameTextField.font = UIFont.systemFont(ofSize: 17)
+        
         
         headerLabel.text = "Новая привычка"
         headerLabel.textColor = .YPBlackDay
@@ -115,14 +123,15 @@ extension CreateHabitViewController {
             contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -106),
             contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
             headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13),
             headerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             nameTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
-            nameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            nameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            nameTextField.widthAnchor.constraint(equalToConstant: contentView.frame.width - 32),
+//            nameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+//            nameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            nameTextField.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            nameTextField.widthAnchor.constraint(equalToConstant: 343),
             nameTextField.heightAnchor.constraint(equalToConstant: 75),
             tableForCreateHabit.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             tableForCreateHabit.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 24),
@@ -131,7 +140,7 @@ extension CreateHabitViewController {
             collectionView.topAnchor.constraint(equalTo: tableForCreateHabit.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -46),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: 500),
             cancelButton.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 30),
             cancelButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),

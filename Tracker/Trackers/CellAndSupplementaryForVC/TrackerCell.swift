@@ -38,9 +38,19 @@ final class TrackerCell: UICollectionViewCell {
         daytext.font = UIFont.systemFont(ofSize: 12)
         
         buttonPlus.addTarget(self, action: #selector(completedTracker), for: .touchUpInside)
-        buttonPlus.setImage(UIImage(systemName: "plus"), for: .normal)
+       // buttonPlus.setImage(UIImage(systemName: "plus"), for: .normal)
         buttonPlus.imageView?.tintColor = .YPWhiteDay
         buttonPlus.layer.cornerRadius = 17
+        
+        if isCompletedToday {
+            buttonPlus.setImage(UIImage(named: "done"), for: .normal)
+            buttonPlus.alpha = 0.3
+
+        } else {
+            buttonPlus.setImage(UIImage(systemName: "plus"), for: .normal)
+            buttonPlus.imageView?.tintColor = .YPWhiteDay
+            buttonPlus.alpha = 1
+        }
         
         
         NSLayoutConstraint.activate([
@@ -69,19 +79,18 @@ final class TrackerCell: UICollectionViewCell {
         self.indexPath = indexPath
     }
     
+    
     @objc
     func completedTracker() {
         guard let idTracker = idTracker, let indexPath = indexPath else { return }
         if isCompletedToday {
-            
-            delegate?.uncompleteTracker(id: idTracker, indexPath: indexPath)
-            buttonPlus.setImage(UIImage(systemName: "plus"), for: .normal)
-            buttonPlus.imageView?.tintColor = .YPWhiteDay
-            buttonPlus.alpha = 1
-        } else {
-            delegate?.completeTracker(id: idTracker, indexPath: indexPath)
             buttonPlus.setImage(UIImage(named: "done"), for: .normal)
             buttonPlus.alpha = 0.3
+            delegate?.uncompleteTracker(id: idTracker, indexPath: indexPath)
+        } else {
+            buttonPlus.setImage(UIImage(systemName: "plus"), for: .normal)
+            buttonPlus.imageView?.tintColor = .YPWhiteDay
+            delegate?.completeTracker(id: idTracker, indexPath: indexPath)
         }
     }
     

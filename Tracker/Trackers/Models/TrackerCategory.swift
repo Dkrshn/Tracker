@@ -9,5 +9,5 @@ import Foundation
 
 struct TrackerCategory {
     let nameCategory: String
-    let trakers: [Tracker]
+    let trackers: [Tracker]
 }

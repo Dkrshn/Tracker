@@ -42,7 +42,7 @@ extension CreateTrackerViewController {
         unregularEventButton.layer.cornerRadius = 16
         
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13),
+            headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 27),
             headerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             habitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             habitButton.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 295),

@@ -88,8 +88,6 @@ extension CreateHabitViewController {
         
         nameTextField.layer.cornerRadius = 10
         nameTextField.leftView = nil
-       // nameTextField.layer.backgroundColor = UIColor.YPBackgroundDay.cgColor
-       // nameTextField.layer.backgroundColor = CGColor(srgbRed: 230, green: 232, blue: 235, alpha: 0.3)
         nameTextField.textColor = .YPBlackDay
         nameTextField.clearButtonMode = .whileEditing
         nameTextField.placeholder = "Введите название трекера"
@@ -107,11 +105,11 @@ extension CreateHabitViewController {
         cancelButton.layer.cornerRadius = 16
         cancelButton.addTarget(self, action: #selector(cancelTap), for: .touchUpInside)
         
-        createButton.backgroundColor = .YPGray
         createButton.setTitle("Создать", for: .normal)
         createButton.setTitleColor(.YPWhiteDay, for: .normal)
         createButton.layer.cornerRadius = 16
         createButton.addTarget(self, action: #selector(addTracker), for: .touchUpInside)
+        createButton.backgroundColor = .YPGray
         
         collectionView.isScrollEnabled = false
         
@@ -128,8 +126,6 @@ extension CreateHabitViewController {
             headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13),
             headerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             nameTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
-//            nameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-//            nameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             nameTextField.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             nameTextField.widthAnchor.constraint(equalToConstant: 343),
             nameTextField.heightAnchor.constraint(equalToConstant: 75),

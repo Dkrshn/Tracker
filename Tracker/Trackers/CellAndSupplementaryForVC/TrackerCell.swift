@@ -11,7 +11,7 @@ protocol TrackerCellDelegate: AnyObject {
     func completeTracker(id: UUID, indexPath: IndexPath)
     func uncompleteTracker(id: UUID, indexPath: IndexPath)
 }
- 
+
 final class TrackerCell: UICollectionViewCell {
     let name = UILabel()
     let emoji = UILabel()
@@ -38,20 +38,9 @@ final class TrackerCell: UICollectionViewCell {
         daytext.font = UIFont.systemFont(ofSize: 12)
         
         buttonPlus.addTarget(self, action: #selector(completedTracker), for: .touchUpInside)
-       // buttonPlus.setImage(UIImage(systemName: "plus"), for: .normal)
+        buttonPlus.setImage(UIImage(systemName: "plus"), for: .normal)
         buttonPlus.imageView?.tintColor = .YPWhiteDay
         buttonPlus.layer.cornerRadius = 17
-        
-        if isCompletedToday {
-            buttonPlus.setImage(UIImage(named: "done"), for: .normal)
-            buttonPlus.alpha = 0.3
-
-        } else {
-            buttonPlus.setImage(UIImage(systemName: "plus"), for: .normal)
-            buttonPlus.imageView?.tintColor = .YPWhiteDay
-            buttonPlus.alpha = 1
-        }
-        
         
         NSLayoutConstraint.activate([
             backView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -73,10 +62,19 @@ final class TrackerCell: UICollectionViewCell {
         ])
     }
     
-    func configTrackerCellButtonUI(tracker: Tracker, isCompleted: Bool, indexPath: IndexPath) {
+    func configTrackerCellButtonUI(tracker: Tracker, isCompleted: Bool, indexPath: IndexPath, countDay: Int) {
         self.isCompletedToday = isCompleted
         idTracker = tracker.id
         self.indexPath = indexPath
+        daytext.text = "\(countDay) дней"
+        if isCompletedToday {
+            buttonPlus.setImage(UIImage(named: "done"), for: .normal)
+            buttonPlus.alpha = 0.3
+        } else {
+            buttonPlus.setImage(UIImage(systemName: "plus"), for: .normal)
+            buttonPlus.imageView?.tintColor = .YPWhiteDay
+            buttonPlus.alpha = 1
+        }
     }
     
     
@@ -84,12 +82,8 @@ final class TrackerCell: UICollectionViewCell {
     func completedTracker() {
         guard let idTracker = idTracker, let indexPath = indexPath else { return }
         if isCompletedToday {
-            buttonPlus.setImage(UIImage(named: "done"), for: .normal)
-            buttonPlus.alpha = 0.3
             delegate?.uncompleteTracker(id: idTracker, indexPath: indexPath)
         } else {
-            buttonPlus.setImage(UIImage(systemName: "plus"), for: .normal)
-            buttonPlus.imageView?.tintColor = .YPWhiteDay
             delegate?.completeTracker(id: idTracker, indexPath: indexPath)
         }
     }

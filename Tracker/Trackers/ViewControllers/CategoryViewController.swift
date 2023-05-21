@@ -48,7 +48,7 @@ extension CategoryViewController {
         confirmButton.addTarget(self, action: #selector(addCategory), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13),
+            header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 27),
             header.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             confirmButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             confirmButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),

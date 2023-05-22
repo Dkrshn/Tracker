@@ -22,7 +22,7 @@ class TrackerViewController: UIViewController {
     private var completedTracker = [TrackerRecord]()
     private let createHabit = CreateHabitViewController.shared
     private var currentDate: Date = Date()
-    private let toDay: Date = Date()
+   // private let toDay: Date = Date()
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -242,10 +242,16 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
 extension TrackerViewController: TrackerCellDelegate {
     func completeTracker(id: UUID, indexPath: IndexPath) {
         installDateToCurrent()
-        if Calendar.current.isDate(toDay, inSameDayAs: currentDate) {
-            let trackerRecord = TrackerRecord(trackerId: id, date: currentDate)
-            completedTracker.append(trackerRecord)
-            collectionView.reloadItems(at: [indexPath])
+        let calendar = Calendar.current
+        let toDay = calendar.dateComponents([.year, .month, .day], from: Date())
+        let dateOnCalendar = calendar.dateComponents([.year, .month, .day], from: currentDate)
+        if let extractedToDay = calendar.date(from: toDay),
+           let extractedCurrentDate = calendar.date(from: dateOnCalendar) {
+            if extractedCurrentDate <= extractedToDay {
+                let trackerRecord = TrackerRecord(trackerId: id, date: currentDate)
+                completedTracker.append(trackerRecord)
+                collectionView.reloadItems(at: [indexPath])
+            }
         }
     }
     

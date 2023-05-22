@@ -68,7 +68,7 @@ final class TrackerCell: UICollectionViewCell {
         self.indexPath = indexPath
         daytext.text = "\(countDay) дней"
         if isCompletedToday {
-            buttonPlus.setImage(UIImage(named: "done"), for: .normal)
+            buttonPlus.setImage(UIImage(systemName: "checkmark"), for: .normal)
             buttonPlus.alpha = 0.3
         } else {
             buttonPlus.setImage(UIImage(systemName: "plus"), for: .normal)

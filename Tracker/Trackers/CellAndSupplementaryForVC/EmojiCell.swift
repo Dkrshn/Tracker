@@ -10,17 +10,15 @@ import UIKit
 final class EmojiCell: UICollectionViewCell {
     let textLabel = UILabel()
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         contentView.addSubview(textLabel)
         textLabel.translatesAutoresizingMaskIntoConstraints = false
         
-       
-       NSLayoutConstraint.activate([
-        textLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-        textLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        NSLayoutConstraint.activate([
+            textLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            textLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
         ])
     }
     

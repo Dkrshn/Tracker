@@ -47,7 +47,6 @@ extension CreateScheduleViewController {
         tableView.layer.cornerRadius = 10
         tableView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMinXMinYCorner]
         
-        
         confirmButton.backgroundColor = .YPBlackDay
         confirmButton.setTitle("Готово", for: .normal)
         confirmButton.setTitleColor(.YPWhiteDay, for: .normal)
@@ -56,7 +55,7 @@ extension CreateScheduleViewController {
         
         NSLayoutConstraint.activate([
             headerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13),
+            headerLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 27),
             confirmButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             confirmButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
             confirmButton.widthAnchor.constraint(equalToConstant: 335),

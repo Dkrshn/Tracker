@@ -17,11 +17,11 @@ final class CategoryViewController: UIViewController {
     weak var delegate: CreateCategoryDelegate?
     
     override func viewDidLoad() {
-         super.viewDidLoad()
+        super.viewDidLoad()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellCategory")
         tableView.delegate = self
         tableView.dataSource = self
-         makeUi()
+        makeUi()
     }
 }
 
@@ -48,7 +48,7 @@ extension CategoryViewController {
         confirmButton.addTarget(self, action: #selector(addCategory), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 13),
+            header.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 27),
             header.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             confirmButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             confirmButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
@@ -79,8 +79,6 @@ extension CategoryViewController: UITableViewDataSource {
         cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
         return cell
     }
-    
-    
 }
 
 extension CategoryViewController: UITableViewDelegate {

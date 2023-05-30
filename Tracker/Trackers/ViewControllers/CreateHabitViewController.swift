@@ -50,6 +50,7 @@ final class CreateHabitViewController: UIViewController {
         tableForCreateHabit.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableForCreateHabit.register(CreateHabitCell.self, forCellReuseIdentifier: "cellCustom")
         collectionView.register(EmojiCell.self, forCellWithReuseIdentifier: "emojiCell")
+        collectionView.register(ColorCell.self, forCellWithReuseIdentifier: "colorCell")
         collectionView.register(SupplementaryViewEmojiColor.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         makeUI()
         createSchedule.delegate = self
@@ -184,6 +185,17 @@ extension CreateHabitViewController {
             }
         }
     }
+    
+    func chekFields() {
+        if !category.isEmpty,
+           !visibleDay.isEmpty,
+           let text = nameTextField.text,
+           selectedEmoji != nil,
+           selectedColor != nil {
+            createButton.backgroundColor = .YPBlackDay
+            loadViewIfNeeded()
+        }
+    }
 }
 
 extension CreateHabitViewController: UITableViewDataSource {
@@ -254,6 +266,7 @@ extension CreateHabitViewController: CreateScheduleDelegate {
         }
         
         tableForCreateHabit.reloadData()
+        chekFields()
     }
 }
 
@@ -261,6 +274,7 @@ extension CreateHabitViewController: CreateCategoryDelegate {
     func createCategory(category: String) {
         self.category = category
         tableForCreateHabit.reloadData()
+        chekFields()
     }
 }
 
@@ -297,9 +311,9 @@ extension CreateHabitViewController: UICollectionViewDataSource {
             cell.textLabel.font = UIFont.systemFont(ofSize: 32)
             return cell
         }
-        case 1: if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as? EmojiCell {
-            cell.backgroundColor = colors[indexPath.row]
-            cell.layer.cornerRadius = 8
+        case 1: if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colorCell", for: indexPath) as? ColorCell {
+            cell.mainView.backgroundColor = colors[indexPath.row]
+           // cell.layer.cornerRadius = 8
             return cell
         }
         default: return UICollectionViewCell()
@@ -335,10 +349,14 @@ extension CreateHabitViewController: UICollectionViewDelegateFlowLayout {
             cell.backgroundColor = .YPLightGray
             cell.layer.cornerRadius = 16
             selectedEmoji = cell.textLabel.text
-        case 1: let cell = collectionView.cellForItem(at: indexPath)
-            cell?.layer.borderWidth = 3
-            cell?.layer.borderColor = UIColor.YPWhiteDay.cgColor
-            selectedColor = cell?.backgroundColor
+            chekFields()
+        case 1: guard let cell = collectionView.cellForItem(at: indexPath) as? ColorCell else { return }
+            cell.contentView.layer.borderWidth = 3
+            cell.contentView.layer.borderColor = cell.mainView.backgroundColor?.withAlphaComponent(0.3).cgColor
+           // cell?.layer.borderWidth = 3
+           // cell?.layer.borderColor = UIColor.YPWhiteDay.cgColor
+            selectedColor = cell.mainView.backgroundColor
+            chekFields()
         default: print("---------------------\(indexPath.section)")
         }
     }
@@ -348,16 +366,18 @@ extension CreateHabitViewController: UICollectionViewDelegateFlowLayout {
         case 0: guard let cell = collectionView.cellForItem(at: indexPath) else { return }
             cell.backgroundColor = .YPWhiteDay
             cell.layer.cornerRadius = 16
-        case 1: let cell = collectionView.cellForItem(at: indexPath)
-            cell?.layer.borderWidth = 0
+        case 1: guard let cell = collectionView.cellForItem(at: indexPath) as? ColorCell else { return }
+            cell.contentView.layer.borderWidth = 0
+            cell.contentView.layer.borderColor = cell.contentView.backgroundColor?.cgColor
+           // cell?.layer.borderWidth = 0
         default: print("---------------------\(indexPath.section)")
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch indexPath.section {
-        case 0: return CGSize(width: collectionView.frame.width / 6, height: 40)
-        case 1: return CGSize(width: 40, height: 40)
+        case 0: return CGSize(width: collectionView.frame.width / 6, height: 45)
+        case 1: return CGSize(width: 45, height: 45)
         default: break
         }
         fatalError("Section not found")

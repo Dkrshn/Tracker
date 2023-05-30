@@ -15,6 +15,7 @@
 		A550417F29F6D49E0075DA85 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A550417E29F6D49E0075DA85 /* UIColor.swift */; };
 		A550418129F6EB120075DA85 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A550418029F6EB120075DA85 /* TabBarViewController.swift */; };
 		A550418329F6EF7A0075DA85 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A550418229F6EF7A0075DA85 /* StatisticsViewController.swift */; };
+		A571458D2A25F377002A49BD /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A571458C2A25F377002A49BD /* ColorCell.swift */; };
 		A573883A2A03CE120050394F /* TrackerCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57388392A03CE120050394F /* TrackerCategory.swift */; };
 		A574758F2A0506AC00CA5E17 /* CreateHabitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A574758E2A0506AC00CA5E17 /* CreateHabitCell.swift */; };
 		A57475912A05077A00CA5E17 /* DayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57475902A05077A00CA5E17 /* DayCell.swift */; };
@@ -43,6 +44,7 @@
 		A550417E29F6D49E0075DA85 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		A550418029F6EB120075DA85 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		A550418229F6EF7A0075DA85 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
+		A571458C2A25F377002A49BD /* ColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
 		A57388392A03CE120050394F /* TrackerCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategory.swift; sourceTree = "<group>"; };
 		A574758E2A0506AC00CA5E17 /* CreateHabitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateHabitCell.swift; sourceTree = "<group>"; };
 		A57475902A05077A00CA5E17 /* DayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCell.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 			children = (
 				A57475902A05077A00CA5E17 /* DayCell.swift */,
 				A57475932A056F9700CA5E17 /* EmojiCell.swift */,
+				A571458C2A25F377002A49BD /* ColorCell.swift */,
 				A5CC245229FE6C7D00D4D03D /* TrackerCell.swift */,
 				A574758E2A0506AC00CA5E17 /* CreateHabitCell.swift */,
 				A5288E7C2A114EF10057D30A /* SupplementaryViewEmojiColor.swift */,
@@ -244,6 +247,7 @@
 				A50E02992A004E630082FF7A /* TrackerViewController.swift in Sources */,
 				A574758F2A0506AC00CA5E17 /* CreateHabitCell.swift in Sources */,
 				A5C2AE6B29F1449E000AFF07 /* SceneDelegate.swift in Sources */,
+				A571458D2A25F377002A49BD /* ColorCell.swift in Sources */,
 				A5288E7F2A114F1E0057D30A /* SupplementaryViewCategory.swift in Sources */,
 				A5CBE07029FBBA9A002AA691 /* CreateScheduleViewController.swift in Sources */,
 				A5CC245129FE605A00D4D03D /* Tracker.swift in Sources */,

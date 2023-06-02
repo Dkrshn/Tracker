@@ -23,6 +23,10 @@ class TrackerViewController: UIViewController {
     private let createHabit = CreateHabitViewController.shared
     private var currentDate: Date = Date()
    // private let toDay: Date = Date()
+    private let categoryStore = TrackerCategoryStore.shared
+
+    
+    private let trackerStore = TrackerStore.shared
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -33,11 +37,13 @@ class TrackerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .YPWhiteDay
-        categories = storage.storageTrakerCategory
+       // categories = storage.storageTrakerCategory
+        categories = try! categoryStore.readCategory()
         reloadVisibleCategories()
         collectionView.register(SupplementaryViewCategory.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         makeUI()
         searchTextField.delegate = self
+        
         collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "cellCollection")
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -265,5 +271,10 @@ extension TrackerViewController: TrackerCellDelegate {
     }
 }
 
+//extension TrackerViewController: TrackerCategoryStoreDelegate {
+//    func updateCategory(_ store: TrackerCategoryStore) {
+//        categories = store.readCategory()
+//    }
+//}
 
 

@@ -10,6 +10,7 @@
 		A50259592A00F58100A7084E /* WeekDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50259582A00F58100A7084E /* WeekDay.swift */; };
 		A50E02972A00302A0082FF7A /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50E02962A00302A0082FF7A /* Storage.swift */; };
 		A50E02992A004E630082FF7A /* TrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50E02982A004E630082FF7A /* TrackerViewController.swift */; };
+		A5106D562A2763AF0083ED28 /* ColorAndDayMarshalling.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5106D552A2763AE0083ED28 /* ColorAndDayMarshalling.swift */; };
 		A5288E7D2A114EF10057D30A /* SupplementaryViewEmojiColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5288E7C2A114EF10057D30A /* SupplementaryViewEmojiColor.swift */; };
 		A5288E7F2A114F1E0057D30A /* SupplementaryViewCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5288E7E2A114F1E0057D30A /* SupplementaryViewCategory.swift */; };
 		A550417F29F6D49E0075DA85 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A550417E29F6D49E0075DA85 /* UIColor.swift */; };
@@ -43,6 +44,7 @@
 		A50259582A00F58100A7084E /* WeekDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekDay.swift; sourceTree = "<group>"; };
 		A50E02962A00302A0082FF7A /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		A50E02982A004E630082FF7A /* TrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerViewController.swift; sourceTree = "<group>"; };
+		A5106D552A2763AE0083ED28 /* ColorAndDayMarshalling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorAndDayMarshalling.swift; sourceTree = "<group>"; };
 		A5288E7C2A114EF10057D30A /* SupplementaryViewEmojiColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementaryViewEmojiColor.swift; sourceTree = "<group>"; };
 		A5288E7E2A114F1E0057D30A /* SupplementaryViewCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementaryViewCategory.swift; sourceTree = "<group>"; };
 		A550417E29F6D49E0075DA85 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 				A550417E29F6D49E0075DA85 /* UIColor.swift */,
 				A50E02962A00302A0082FF7A /* Storage.swift */,
 				A5CC244D29FE5D1700D4D03D /* TextField.swift */,
+				A5106D552A2763AE0083ED28 /* ColorAndDayMarshalling.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				A5C2AE6B29F1449E000AFF07 /* SceneDelegate.swift in Sources */,
 				A571458D2A25F377002A49BD /* ColorCell.swift in Sources */,
 				A5288E7F2A114F1E0057D30A /* SupplementaryViewCategory.swift in Sources */,
+				A5106D562A2763AF0083ED28 /* ColorAndDayMarshalling.swift in Sources */,
 				A5CBE07029FBBA9A002AA691 /* CreateScheduleViewController.swift in Sources */,
 				A5CC245129FE605A00D4D03D /* Tracker.swift in Sources */,
 				A57475912A05077A00CA5E17 /* DayCell.swift in Sources */,

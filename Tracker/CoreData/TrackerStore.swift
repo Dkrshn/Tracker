@@ -37,16 +37,14 @@ final class TrackerStore: NSObject {
     func addNewTracker(_ tracker: Tracker, with category: TrackerCategory) throws {
         let savedCategories = try trackerStoreCategory.getCategoryCoreData(category.nameCategory)
         if !savedCategories.isEmpty {
-            let categoryIndex = 0
-            guard let test = savedCategories.first else { return }
-            let currentTrackerCategoryCoreData = try trackerStoreCategory.getCategoryAtIndex(index: categoryIndex)
+            guard let category = savedCategories.first else { return }
             let newTracker = TrackerCoreData(context: context)
             newTracker.name = tracker.name
             newTracker.emoji = tracker.emoji
             newTracker.id = tracker.id
             newTracker.color = colorAndDayMarshalling.hexString(from: tracker.color)
             newTracker.schedule = colorAndDayMarshalling.dayString(from: tracker.schedule!)
-            test.addToTracker(newTracker)
+            category.addToTracker(newTracker)
             try context.save()
         } else {
             let trackerCoreData = TrackerCoreData(context: context)
@@ -60,7 +58,13 @@ final class TrackerStore: NSObject {
             trackerCategoryCoreData.tracker = NSSet(object: trackerCoreData)
             trackerCoreData.trackerCategory = trackerCategoryCoreData
             try context.save()
+            try updateResult()
+            try trackerStoreCategory.updateResult()
         }
+    }
+    
+    func updateResult() throws {
+        try fetchedResultsController.performFetch()
     }
     
     func clearData() throws {

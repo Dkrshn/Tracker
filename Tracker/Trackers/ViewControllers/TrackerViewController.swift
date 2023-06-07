@@ -36,7 +36,8 @@ class TrackerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .YPWhiteDay
-        categories = try! categoryStore.readCategory()
+        guard let getCategories = try? categoryStore.readCategory() else { return }
+        categories = getCategories
         reloadVisibleCategories()
         collectionView.register(SupplementaryViewCategory.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         makeUI()

@@ -43,7 +43,7 @@ final class TrackerCategoryStore: NSObject {
     func getCategoryCoreData(_ categoryName: String) throws -> [TrackerCategoryCoreData] {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
         request.predicate = NSPredicate(format: " %K == %@", #keyPath(TrackerCategoryCoreData.nameCategory), categoryName)
-        let category = try! context.fetch(request)
+        let category = try context.fetch(request)
         return category
     }
     
@@ -80,6 +80,10 @@ final class TrackerCategoryStore: NSObject {
             trackers.append(Tracker(id: trackerID, name: trackerName, emoji: trackerEmoji, color: colorAndDayMarshalling.color(from: trackerColor), schedule: colorAndDayMarshalling.day(from: trackerSchedule)))
         }
         return trackers
+    }
+    
+    func updateResult() throws {
+        try fetchedResultsController.performFetch()
     }
     
     func clearData() throws {

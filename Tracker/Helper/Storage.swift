@@ -21,7 +21,7 @@ final class Storage {
         let newTracker = Tracker(id: uniqueId, name: name, emoji: emoji, color: color, schedule: schedule)
         trackers.append(newTracker)
         let newTrackerCategory = TrackerCategory(nameCategory: "Важное", trackers: trackers)
-        try! trackerStore.addNewTracker(newTracker, with: newTrackerCategory)
+        try? trackerStore.addNewTracker(newTracker, with: newTrackerCategory)
     }
 }
 

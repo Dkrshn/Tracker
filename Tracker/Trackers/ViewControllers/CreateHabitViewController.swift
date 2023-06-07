@@ -196,7 +196,7 @@ extension CreateHabitViewController {
         }
     }
     
-    func chekFields() {
+    func checkFields() {
         if !category.isEmpty,
            !visibleDay.isEmpty,
            let text = nameTextField.text,
@@ -212,7 +212,12 @@ extension CreateHabitViewController {
 
 extension CreateHabitViewController: CreateScheduleDelegate {
     func createScheduleTracker(schedule: [String]) {
-        visibleDay = schedule.joined(separator: ", ")
+        if schedule.count == 7 {
+            visibleDay = "Каждый день"
+        } else {
+            visibleDay = schedule.joined(separator: ", ")
+        }
+       
         for i in schedule {
             switch i {
             case "Пн": finalSchedule.append(WeekDay.monday)
@@ -227,7 +232,7 @@ extension CreateHabitViewController: CreateScheduleDelegate {
         }
         
         tableForCreateHabit.reloadData()
-        chekFields()
+        checkFields()
     }
 }
 
@@ -235,7 +240,7 @@ extension CreateHabitViewController: CreateCategoryDelegate {
     func createCategory(category: String) {
         self.category = category
         tableForCreateHabit.reloadData()
-        chekFields()
+        checkFields()
     }
 }
 
@@ -358,12 +363,12 @@ extension CreateHabitViewController: UICollectionViewDelegateFlowLayout {
             cell.backgroundColor = .YPLightGray
             cell.layer.cornerRadius = 16
             selectedEmoji = cell.textLabel.text
-            chekFields()
+            checkFields()
         case collectionViewColor: guard let cell = collectionView.cellForItem(at: indexPath) as? ColorCell else { return }
             cell.contentView.layer.borderWidth = 3
             cell.contentView.layer.borderColor = cell.mainView.backgroundColor?.withAlphaComponent(0.3).cgColor
             selectedColor = cell.mainView.backgroundColor
-            chekFields()
+            checkFields()
         default: print("---------------------\(indexPath.section)")
         }
     }

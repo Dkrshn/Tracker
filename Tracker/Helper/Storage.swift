@@ -13,23 +13,15 @@ final class Storage {
     static let shared = Storage()
     var trackers: [Tracker] = []
     var storageTrakerCategory: [TrackerCategory] = []
+    private let trackerStore = TrackerStore.shared
     
     func addNewTracker(name: String, emoji: String, color: UIColor, schedule: [WeekDay], category: String) {
         
-        if storageTrakerCategory.isEmpty {
-            let uniqueId = UUID()
-            let newTracker = Tracker(id: uniqueId, name: name, emoji: emoji, color: color, schedule: schedule)
-            trackers.append(newTracker)
-            let newTrackerCategory = TrackerCategory(nameCategory: "Важное", trackers: trackers)
-            storageTrakerCategory.append(newTrackerCategory)
-        } else {
-            storageTrakerCategory.removeLast()
-            let uniqueId = UUID()
-            let newTracker = Tracker(id: uniqueId, name: name, emoji: emoji, color: color, schedule: schedule)
-            trackers.append(newTracker)
-            let newTrackerCategory = TrackerCategory(nameCategory: "Важное", trackers: trackers)
-            storageTrakerCategory.append(newTrackerCategory)
-        }
+        let uniqueId = UUID()
+        let newTracker = Tracker(id: uniqueId, name: name, emoji: emoji, color: color, schedule: schedule)
+        trackers.append(newTracker)
+        let newTrackerCategory = TrackerCategory(nameCategory: "Важное", trackers: trackers)
+        try? trackerStore.addNewTracker(newTracker, with: newTrackerCategory)
     }
 }
 

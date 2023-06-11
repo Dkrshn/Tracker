@@ -19,10 +19,13 @@ class TrackerViewController: UIViewController {
     let storage = Storage.shared
     private var categories = [TrackerCategory]()
     private var visibleTrackerCategories = [TrackerCategory]()
-    private var completedTracker = [TrackerRecord]()
     private let createHabit = CreateHabitViewController.shared
     private var currentDate: Date = Date()
-   // private let toDay: Date = Date()
+    private let categoryStore = TrackerCategoryStore.shared
+    private let recordStore = TrackerRecordStore.shared
+    
+    
+    private let trackerStore = TrackerStore.shared
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -33,11 +36,13 @@ class TrackerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .YPWhiteDay
-        categories = storage.storageTrakerCategory
+        guard let getCategories = try? categoryStore.readCategory() else { return }
+        categories = getCategories
         reloadVisibleCategories()
         collectionView.register(SupplementaryViewCategory.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         makeUI()
         searchTextField.delegate = self
+        
         collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "cellCollection")
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -183,7 +188,8 @@ extension TrackerViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellCollection", for: indexPath) as? TrackerCell else { return UICollectionViewCell() }
         let tracker = visibleTrackerCategories[0].trackers[indexPath.row]
         let isCompletedToday = isCompletedTrackerToday(id: tracker.id)
-        let countDay =  completedTracker.filter { $0.trackerId == tracker.id }.count
+        guard let record = try? recordStore.getRecord() else { return UICollectionViewCell() }
+        let countDay = record.filter {$0.trackerId == tracker.id}.count
         cell.configTrackerCellButtonUI(tracker: tracker, isCompleted: isCompletedToday, indexPath: indexPath, countDay: countDay)
         cell.delegate = self
         cell.name.text = "\(visibleTrackerCategories[0].trackers[indexPath.row].name)"
@@ -194,7 +200,8 @@ extension TrackerViewController: UICollectionViewDataSource {
     }
     
     private func isCompletedTrackerToday(id: UUID) -> Bool {
-        completedTracker.contains { trackerRecord in
+        guard let records = try? recordStore.getRecord() else { return false }
+        return records.contains { trackerRecord in
             installDateToCurrent()
             let sameDay = Calendar.current.isDate(trackerRecord.date, inSameDayAs: currentDate)
             return trackerRecord.trackerId == id && sameDay
@@ -249,21 +256,21 @@ extension TrackerViewController: TrackerCellDelegate {
            let extractedCurrentDate = calendar.date(from: dateOnCalendar) {
             if extractedCurrentDate <= extractedToDay {
                 let trackerRecord = TrackerRecord(trackerId: id, date: currentDate)
-                completedTracker.append(trackerRecord)
+                try? recordStore.addNewRecord(id, date: currentDate)
                 collectionView.reloadItems(at: [indexPath])
             }
         }
     }
     
     func uncompleteTracker(id: UUID, indexPath: IndexPath) {
-        completedTracker.removeAll { trackerRecord in
-            installDateToCurrent()
-            let sameDay = Calendar.current.isDate(trackerRecord.date, inSameDayAs: currentDate)
-            return trackerRecord.trackerId == id && sameDay
+        installDateToCurrent()
+        guard let record = try? recordStore.getRecordAtID(id: id) else { return }
+        let sameDay = Calendar.current.isDate(record.date, inSameDayAs: currentDate)
+        if sameDay {
+            try? recordStore.deleteRecord(id)
         }
         collectionView.reloadItems(at: [indexPath])
     }
 }
-
 
 

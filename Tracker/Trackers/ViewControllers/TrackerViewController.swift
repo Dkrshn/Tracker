@@ -16,7 +16,6 @@ class TrackerViewController: UIViewController {
     private let searchTextField  = TextField()
     private let datePicker = UIDatePicker()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    let storage = Storage.shared
     private var categories = [TrackerCategory]()
     private var visibleTrackerCategories = [TrackerCategory]()
     private let createHabit = CreateHabitViewController.shared

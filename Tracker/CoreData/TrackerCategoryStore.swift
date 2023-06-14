@@ -47,12 +47,6 @@ final class TrackerCategoryStore: NSObject {
         return category
     }
     
-    
-    func getCategoryAtIndex(index: Int) throws -> TrackerCategoryCoreData {
-        let currentTrackerCategoryCoreData = try fetchedResultsController.object(at: IndexPath(row: index, section: 0))
-        return currentTrackerCategoryCoreData
-    }
-    
     func readCategory() throws -> [TrackerCategory] {
         guard let categories = fetchedResultsController.fetchedObjects,
               let trackerCategory = try? categories.map({ try self.convertCategoryTracker(categoryCoreData: $0)})

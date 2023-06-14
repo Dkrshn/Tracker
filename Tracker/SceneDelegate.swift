@@ -14,9 +14,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
+//        let vc = CategoryViewController()
+//        let categoryModel = (UIApplication.shared.delegate as! AppDelegate).categoryModel
+//        let viewModel = CategoryViewModel(for: categoryModel)
+//        vc.initialize(viewModel: viewModel)
+        
         let window = UIWindow(windowScene: scene)
-        let tabBarViewController = TabBarViewController()
-        window.rootViewController = tabBarViewController
+        let onboardingPageView = OnboardingPageView(transitionStyle: UIPageViewController.TransitionStyle.scroll, navigationOrientation: UIPageViewController.NavigationOrientation.horizontal)
+        window.rootViewController = onboardingPageView
         self.window = window
         window.makeKeyAndVisible()
     }

@@ -14,18 +14,18 @@ final class CategoryViewController: UIViewController {
     private let tableView = UITableView()
     private let emptyLabel = UILabel()
     private let emptyImage = UIImageView()
-  //  private var savedCategories: [String] = []
     private var choiceCategory: String = ""
     static let shared = CategoryViewController()
-   // weak var delegate: CreateCategoryDelegate?
+    weak var delegate: CreateCategoryDelegate?
     private var viewModel: CategoryViewModel?
+    private var selectedIndexPath: IndexPath?
     
     private var savedCategory: NSObject?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel?.readAndSaveCategory()
         viewModel = CategoryViewModel()
+        viewModel?.readAndSaveCategory()
         bind()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellCategory")
         tableView.delegate = self
@@ -70,7 +70,7 @@ extension CategoryViewController {
             confirmButton.heightAnchor.constraint(equalToConstant: 60)
         ])
         
-       guard let savedCategoryIsEmpty = viewModel?.checkSavedCategory() else { return }
+        guard let savedCategoryIsEmpty = viewModel?.checkSavedCategory() else { return }
         
         if savedCategoryIsEmpty {
             
@@ -105,7 +105,7 @@ extension CategoryViewController {
                 tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 tableView.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 38),
                 tableView.widthAnchor.constraint(equalToConstant: 343),
-                tableView.heightAnchor.constraint(equalToConstant: 75)
+                tableView.bottomAnchor.constraint(equalTo: confirmButton.topAnchor)
             ])
         }
     }
@@ -127,7 +127,7 @@ extension CategoryViewController {
             tableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             tableView.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 38),
             tableView.widthAnchor.constraint(equalToConstant: 343),
-            tableView.heightAnchor.constraint(equalToConstant: 75)
+            tableView.bottomAnchor.constraint(equalTo: confirmButton.topAnchor)
         ])
     }
     
@@ -139,44 +139,47 @@ extension CategoryViewController {
             present(createCategory, animated: true)
         } else {
             dismiss(animated: true)
-           // delegate?.createCategory(category: savedCategories[0])
-            print("---------------\(choiceCategory)")
-            viewModel?.createCategory(choiceCategory)
+            delegate?.createCategory(category: choiceCategory)
         }
     }
 }
 
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       // return savedCategories.count
         guard let numberOfRows = viewModel?.savedCategory.count else { return 0 }
         return numberOfRows
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellCategory", for: indexPath)
-      //  cell.textLabel?.text = savedCategories[indexPath.row]
         guard let dataForTable = viewModel?.savedCategory else { return UITableViewCell() }
         cell.textLabel?.text = dataForTable[indexPath.row]
         cell.backgroundColor = .YPBackgroundDay
-     //   if indexPath.row == savedCategories.count - 1 {
-        if indexPath.row == dataForTable.count - 1 {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-        } else {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-        }
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         return cell
     }
 }
 
 extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        
+        if let selectedIndexPath = selectedIndexPath,
+           let cell = tableView.cellForRow(at: selectedIndexPath) {
+            tableView.deselectRow(at: selectedIndexPath, animated: true)
+            cell.accessoryType = .none
+        }
+        
+        tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+        selectedIndexPath = indexPath
         if let cell = tableView.cellForRow(at: indexPath),
            let text = cell.textLabel?.text {
-            cell.accessoryType = .checkmark
             choiceCategory = text
+            cell.accessoryType = .checkmark
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -193,7 +196,7 @@ extension CategoryViewController: NewCategoryViewControllerDelegate {
             removeEmptyElement()
         } else {
             viewModel?.addCategory(category)
-          //  tableView.reloadData()
+            tableView.reloadData()
         }
     }
 }

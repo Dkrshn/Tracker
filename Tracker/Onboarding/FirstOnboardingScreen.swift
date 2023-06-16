@@ -13,7 +13,7 @@ final class FirstOnboardingScreen: UIViewController {
         let screen = UIImageView()
         screen.image = UIImage(named: "firstScreen")
         screen.translatesAutoresizingMaskIntoConstraints = false
-    
+        
         return screen
     }()
     
@@ -24,7 +24,7 @@ final class FirstOnboardingScreen: UIViewController {
         text.text = "Отслеживайте только \n то, что хотите"
         text.font = UIFont.boldSystemFont(ofSize: 32)
         text.translatesAutoresizingMaskIntoConstraints = false
-    
+        
         return text
     }()
     

@@ -10,10 +10,8 @@ import Foundation
 @objcMembers
 final class CategoryViewModel: NSObject {
     
-    static let shared = CategoryViewModel()
     
     dynamic private(set) var savedCategory: [String] = []
-    weak var delegate: CreateCategoryDelegate?
     
     private let model = TrackerCategoryStore.shared
     
@@ -24,9 +22,6 @@ final class CategoryViewModel: NSObject {
         }
     }
     
-    func createCategory(_ category: String) {
-        delegate?.createCategory(category: category)
-    }
     
     func checkSavedCategory() -> Bool {
         return savedCategory.isEmpty

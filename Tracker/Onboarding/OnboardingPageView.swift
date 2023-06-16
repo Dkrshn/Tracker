@@ -25,7 +25,7 @@ final class OnboardingPageView: UIPageViewController {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.addTarget(self, action: #selector(openTrackers), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
-    
+        
         return button
     }()
     
@@ -94,17 +94,15 @@ extension OnboardingPageView: UIPageViewControllerDataSource {
         let nextIndex = viewControllerIndex + 1
         
         guard nextIndex < pages.count else {
-           return pages[0]
+            return pages[0]
         }
         return pages[nextIndex]
     }
-    
-    
 }
 
 extension OnboardingPageView: UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-       
+        
         if let currentViewController = pageViewController.viewControllers?.first,
            let currentIndex = pages.firstIndex(of: currentViewController) {
             pageControl.currentPage = currentIndex

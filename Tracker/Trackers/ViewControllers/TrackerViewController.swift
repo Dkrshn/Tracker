@@ -174,27 +174,31 @@ extension TrackerViewController: UITextFieldDelegate {
 }
 
 extension TrackerViewController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        visibleTrackerCategories.count
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if visibleTrackerCategories.isEmpty {
             return 0
         } else {
-            return visibleTrackerCategories[0].trackers.count
+            return visibleTrackerCategories[section].trackers.count
         }
         
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellCollection", for: indexPath) as? TrackerCell else { return UICollectionViewCell() }
-        let tracker = visibleTrackerCategories[0].trackers[indexPath.row]
+        let tracker = visibleTrackerCategories[indexPath.section].trackers[indexPath.row]
         let isCompletedToday = isCompletedTrackerToday(id: tracker.id)
         guard let record = try? recordStore.getRecord() else { return UICollectionViewCell() }
         let countDay = record.filter {$0.trackerId == tracker.id}.count
         cell.configTrackerCellButtonUI(tracker: tracker, isCompleted: isCompletedToday, indexPath: indexPath, countDay: countDay)
         cell.delegate = self
-        cell.name.text = "\(visibleTrackerCategories[0].trackers[indexPath.row].name)"
-        cell.emoji.text = "\(visibleTrackerCategories[0].trackers[indexPath.row].emoji)"
-        cell.backView.backgroundColor = visibleTrackerCategories[0].trackers[indexPath.row].color
-        cell.buttonPlus.backgroundColor = visibleTrackerCategories[0].trackers[indexPath.row].color
+        cell.name.text = "\(visibleTrackerCategories[indexPath.section].trackers[indexPath.row].name)"
+        cell.emoji.text = "\(visibleTrackerCategories[indexPath.section].trackers[indexPath.row].emoji)"
+        cell.backView.backgroundColor = visibleTrackerCategories[indexPath.section].trackers[indexPath.row].color
+        cell.buttonPlus.backgroundColor = visibleTrackerCategories[indexPath.section].trackers[indexPath.row].color
         return cell
     }
     
@@ -212,7 +216,7 @@ extension TrackerViewController: UICollectionViewDataSource {
         
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? SupplementaryViewCategory
         if !visibleTrackerCategories.isEmpty {
-            view?.titleLabel.text = "\(visibleTrackerCategories[indexPath.row].nameCategory)"
+            view?.titleLabel.text = "\(visibleTrackerCategories[indexPath.section].nameCategory)"
             
         }
         return view!

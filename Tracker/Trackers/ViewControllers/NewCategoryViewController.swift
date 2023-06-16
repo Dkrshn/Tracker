@@ -45,7 +45,7 @@ final class NewCategoryViewController: UIViewController {
         return button
     }()
     
-     weak var delegate: NewCategoryViewControllerDelegate?
+    weak var delegate: NewCategoryViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()

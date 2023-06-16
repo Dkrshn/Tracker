@@ -32,7 +32,6 @@ final class CreateHabitViewController: UIViewController {
     private let storage = Storage.shared
     private let createSchedule = CreateScheduleViewController.shared
     private let createCategory = CategoryViewController.shared
-    private let createCategoryViewModel = CategoryViewModel.shared
     private let emodji = ["🙂", "😻", "🌺", "🐶", "❤️", "😱", "😇", "😡", "🥶", "🤔", "🙌", "🍔", "🥦", "🏓", "🥇", "🎸", "🏝", "😪"]
     private let colors: [UIColor] = [.ColorSet1, .ColorSet2, .ColorSet3, .ColorSet4, .ColorSet5, .ColorSet6, .ColorSet7, .ColorSet8, .ColorSet9, .ColorSet10, .ColorSet11, .ColorSet12, .ColorSet13, .ColorSet14, .ColorSet15, .ColorSet16, .ColorSet17, .ColorSet18]
     private var selectedColor: UIColor?
@@ -59,7 +58,7 @@ final class CreateHabitViewController: UIViewController {
         collectionViewColor.register(SupplementaryViewEmojiColor.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "headerColor")
         makeUI()
         createSchedule.delegate = self
-        createCategoryViewModel.delegate = self
+        createCategory.delegate = self
         
         NotificationCenter.default.addObserver(self, selector: #selector(textFieldDidChange(_:)), name: UITextField.textDidChangeNotification, object: nil)
         
@@ -219,7 +218,7 @@ extension CreateHabitViewController: CreateScheduleDelegate {
         } else {
             visibleDay = schedule.joined(separator: ", ")
         }
-       
+        
         for i in schedule {
             switch i {
             case "Пн": finalSchedule.append(WeekDay.monday)

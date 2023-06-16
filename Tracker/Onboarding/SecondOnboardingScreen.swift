@@ -13,7 +13,7 @@ final class SecondOnboardingScreen: UIViewController {
         let screen = UIImageView()
         screen.image = UIImage(named: "secondScreen")
         screen.translatesAutoresizingMaskIntoConstraints = false
-    
+        
         return screen
     }()
     
@@ -24,7 +24,7 @@ final class SecondOnboardingScreen: UIViewController {
         text.text = "Даже если это \n не литры воды и йога"
         text.font = UIFont.boldSystemFont(ofSize: 32)
         text.translatesAutoresizingMaskIntoConstraints = false
-    
+        
         return text
     }()
     

@@ -14,11 +14,9 @@ final class CategoryViewController: UIViewController {
     private let tableView = UITableView()
     private let emptyLabel = UILabel()
     private let emptyImage = UIImageView()
-    private var choiceCategory: String = ""
     static let shared = CategoryViewController()
     weak var delegate: CreateCategoryDelegate?
     private var viewModel: CategoryViewModel?
-    private var selectedIndexPath: IndexPath?
     
     private var savedCategory: NSObject?
     
@@ -133,6 +131,7 @@ extension CategoryViewController {
     
     @objc
     func addCategory() {
+        guard let choiceCategory = viewModel?.choiceCategory else { return }
         if choiceCategory.isEmpty {
             let createCategory = NewCategoryViewController()
             createCategory.delegate = self
@@ -163,23 +162,17 @@ extension CategoryViewController: UITableViewDataSource {
 extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if let selectedIndexPath = selectedIndexPath,
-           let cell = tableView.cellForRow(at: selectedIndexPath) {
-            tableView.deselectRow(at: selectedIndexPath, animated: true)
-            cell.accessoryType = .none
-        }
-        
-        tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
-        selectedIndexPath = indexPath
         if let cell = tableView.cellForRow(at: indexPath),
            let text = cell.textLabel?.text {
-            choiceCategory = text
             cell.accessoryType = .checkmark
+            viewModel?.choiceCategory = text
         }
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        if let cell = tableView.cellForRow(at: indexPath) {
+            cell.accessoryType = .none
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

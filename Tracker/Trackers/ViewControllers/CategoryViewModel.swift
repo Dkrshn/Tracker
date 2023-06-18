@@ -14,6 +14,7 @@ final class CategoryViewModel: NSObject {
     dynamic private(set) var savedCategory: [String] = []
     
     private let model = TrackerCategoryStore.shared
+    var choiceCategory: String = ""
     
     func readAndSaveCategory() {
         guard let savedTrackersCategory = try? model.readCategory() else { return }

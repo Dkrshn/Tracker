@@ -9,7 +9,6 @@ import UIKit
 
 final class Storage {
     
-    
     static let shared = Storage()
     var trackers: [Tracker] = []
     var storageTrakerCategory: [TrackerCategory] = []
@@ -20,7 +19,7 @@ final class Storage {
         let uniqueId = UUID()
         let newTracker = Tracker(id: uniqueId, name: name, emoji: emoji, color: color, schedule: schedule)
         trackers.append(newTracker)
-        let newTrackerCategory = TrackerCategory(nameCategory: "Важное", trackers: trackers)
+        let newTrackerCategory = TrackerCategory(nameCategory: category, trackers: trackers)
         try? trackerStore.addNewTracker(newTracker, with: newTrackerCategory)
     }
 }

@@ -59,6 +59,7 @@ final class CreateHabitViewController: UIViewController {
         makeUI()
         createSchedule.delegate = self
         createCategory.delegate = self
+        
         NotificationCenter.default.addObserver(self, selector: #selector(textFieldDidChange(_:)), name: UITextField.textDidChangeNotification, object: nil)
         
     }
@@ -217,7 +218,7 @@ extension CreateHabitViewController: CreateScheduleDelegate {
         } else {
             visibleDay = schedule.joined(separator: ", ")
         }
-       
+        
         for i in schedule {
             switch i {
             case "Пн": finalSchedule.append(WeekDay.monday)
@@ -239,6 +240,7 @@ extension CreateHabitViewController: CreateScheduleDelegate {
 extension CreateHabitViewController: CreateCategoryDelegate {
     func createCategory(category: String) {
         self.category = category
+        print("---==========\(category)")
         tableForCreateHabit.reloadData()
         checkFields()
     }

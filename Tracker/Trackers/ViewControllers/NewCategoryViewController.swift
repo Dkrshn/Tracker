@@ -50,6 +50,7 @@ final class NewCategoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         makeUI()
+        textField.delegate = self
     }
     
     @objc
@@ -96,6 +97,13 @@ extension NewCategoryViewController {
             confirmButton.backgroundColor = .YPBlackDay
             loadViewIfNeeded()
         }
+    }
+}
+
+extension NewCategoryViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
 

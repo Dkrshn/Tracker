@@ -224,6 +224,80 @@ extension TrackerViewController: UICollectionViewDataSource {
 }
 
 extension TrackerViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        let identifier = "\(indexPath.row):\(indexPath.section)" as NSString
+        
+        return UIContextMenuConfiguration(identifier: identifier ,actionProvider: { action in
+           let deleteAction = UIAction(title: "Удалить") { [weak self] _ in
+               guard let self = self else { return }
+               self.toDelete(indexPath: indexPath)
+           }
+            
+            let deleteAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.red]
+            let attributedTitle = NSAttributedString(string: "Удалить", attributes: deleteAttributes)
+                    deleteAction.setValue(attributedTitle, forKey: "attributedTitle")
+          
+            
+            return UIMenu(children: [
+                UIAction(title: "Закрепить") { [weak self] _ in
+                    guard let self = self else { return }
+                    self.toFix(indexPath: indexPath)
+                },
+                UIAction(title: "Редактировать") { [weak self] _ in
+                    guard let self = self else { return }
+                    self.toEdit(indexPath: indexPath)
+                },
+                deleteAction
+            ])
+        })
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, previewForHighlightingContextMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        guard let identifier = configuration.identifier as? String else { return nil }
+        let components = identifier.components(separatedBy: ":")
+        guard let rowString = components.first,
+              let sectionString = components.last,
+              let row = Int(rowString),
+              let section = Int(sectionString) else { return nil}
+        let indexPath = IndexPath(row: row, section: section)
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TrackerCell else { return nil }
+        return UITargetedPreview(view: cell.backView)
+    }
+    
+    func toFix(indexPath: IndexPath) {
+        
+    }
+    
+    func toEdit(indexPath: IndexPath) {
+        let tracker = visibleTrackerCategories[indexPath.section].trackers[indexPath.row]
+        guard let record = try? recordStore.getRecord() else { return }
+        let countDay = record.filter {$0.trackerId == tracker.id}.count
+        let categoryName = visibleTrackerCategories[indexPath.section].nameCategory
+        guard let schedule = tracker.schedule else { return }
+        let editVC = EditTrackerHabitViewController(currentCategory: categoryName, currentName: tracker.name, currentSchedule: schedule, currentCountDay: countDay, currentEmoji: tracker.emoji, currentColor: tracker.color, id: tracker.id)
+        present(editVC, animated: true)
+    }
+    
+    func toDelete(indexPath: IndexPath) {
+        let tracker = visibleTrackerCategories[indexPath.section].trackers[indexPath.row]
+        let alert = UIAlertController(title: "Уверены, что хотите удалить трекер?", message: nil, preferredStyle: .actionSheet)
+        let actionDelete = UIAlertAction(title: "Удалить", style: .destructive) {[weak self] _ in
+            guard let self = self else { return }
+            try! self.trackerStore.deleteTracker(id: tracker.id)
+            UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseInOut]) {
+                guard let getCategories = try? self.categoryStore.readCategory() else { return }
+                self.categories = getCategories
+                self.reloadVisibleCategories()
+            }
+            }
+        let actionCencel = UIAlertAction(title: "Отмена", style: .cancel)
+        alert.addAction(actionDelete)
+        alert.addAction(actionCencel)
+        present(alert, animated: true)
+    }
+    
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 167, height: 124)
     }

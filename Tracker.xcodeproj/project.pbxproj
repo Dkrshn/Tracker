@@ -13,6 +13,8 @@
 		A5106D562A2763AF0083ED28 /* ColorAndDayMarshalling.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5106D552A2763AE0083ED28 /* ColorAndDayMarshalling.swift */; };
 		A5288E7D2A114EF10057D30A /* SupplementaryViewEmojiColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5288E7C2A114EF10057D30A /* SupplementaryViewEmojiColor.swift */; };
 		A5288E7F2A114F1E0057D30A /* SupplementaryViewCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5288E7E2A114F1E0057D30A /* SupplementaryViewCategory.swift */; };
+		A5364E582A459EA100047725 /* EditTrackerHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5364E572A459EA100047725 /* EditTrackerHabitViewController.swift */; };
+		A5364E5A2A45A02300047725 /* DataForCellHabit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5364E592A45A02300047725 /* DataForCellHabit.swift */; };
 		A550417F29F6D49E0075DA85 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A550417E29F6D49E0075DA85 /* UIColor.swift */; };
 		A550418129F6EB120075DA85 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A550418029F6EB120075DA85 /* TabBarViewController.swift */; };
 		A550418329F6EF7A0075DA85 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A550418229F6EF7A0075DA85 /* StatisticsViewController.swift */; };
@@ -34,6 +36,7 @@
 		A5C2AE7029F1449E000AFF07 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5C2AE6E29F1449E000AFF07 /* Main.storyboard */; };
 		A5C2AE7229F144A0000AFF07 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5C2AE7129F144A0000AFF07 /* Assets.xcassets */; };
 		A5C2AE7529F144A0000AFF07 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5C2AE7329F144A0000AFF07 /* LaunchScreen.storyboard */; };
+		A5C384752A485EB1001F38FA /* Extension type.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C384742A485EB1001F38FA /* Extension type.swift */; };
 		A5C3B46029FA56D600B64F47 /* CreateTrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C3B45F29FA56D600B64F47 /* CreateTrackerViewController.swift */; };
 		A5C3B46229FA852A00B64F47 /* CreateHabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C3B46129FA852A00B64F47 /* CreateHabitViewController.swift */; };
 		A5CBE07029FBBA9A002AA691 /* CreateScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CBE06F29FBBA9A002AA691 /* CreateScheduleViewController.swift */; };
@@ -52,6 +55,8 @@
 		A5106D552A2763AE0083ED28 /* ColorAndDayMarshalling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorAndDayMarshalling.swift; sourceTree = "<group>"; };
 		A5288E7C2A114EF10057D30A /* SupplementaryViewEmojiColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementaryViewEmojiColor.swift; sourceTree = "<group>"; };
 		A5288E7E2A114F1E0057D30A /* SupplementaryViewCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementaryViewCategory.swift; sourceTree = "<group>"; };
+		A5364E572A459EA100047725 /* EditTrackerHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrackerHabitViewController.swift; sourceTree = "<group>"; };
+		A5364E592A45A02300047725 /* DataForCellHabit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataForCellHabit.swift; sourceTree = "<group>"; };
 		A550417E29F6D49E0075DA85 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		A550418029F6EB120075DA85 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		A550418229F6EF7A0075DA85 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +80,7 @@
 		A5C2AE7129F144A0000AFF07 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A5C2AE7429F144A0000AFF07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A5C2AE7629F144A0000AFF07 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A5C384742A485EB1001F38FA /* Extension type.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension type.swift"; sourceTree = "<group>"; };
 		A5C3B45F29FA56D600B64F47 /* CreateTrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTrackerViewController.swift; sourceTree = "<group>"; };
 		A5C3B46129FA852A00B64F47 /* CreateHabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateHabitViewController.swift; sourceTree = "<group>"; };
 		A5CBE06F29FBBA9A002AA691 /* CreateScheduleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateScheduleViewController.swift; sourceTree = "<group>"; };
@@ -104,6 +110,8 @@
 				A50E02962A00302A0082FF7A /* Storage.swift */,
 				A5CC244D29FE5D1700D4D03D /* TextField.swift */,
 				A5106D552A2763AE0083ED28 /* ColorAndDayMarshalling.swift */,
+				A5364E592A45A02300047725 /* DataForCellHabit.swift */,
+				A5C384742A485EB1001F38FA /* Extension type.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -129,6 +137,7 @@
 				A5C3B46129FA852A00B64F47 /* CreateHabitViewController.swift */,
 				A5C3B45F29FA56D600B64F47 /* CreateTrackerViewController.swift */,
 				A50E02982A004E630082FF7A /* TrackerViewController.swift */,
+				A5364E572A459EA100047725 /* EditTrackerHabitViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -294,12 +303,15 @@
 				A5D52ECD2A0D1E9D001B5424 /* TrackerRecord.swift in Sources */,
 				A50E02992A004E630082FF7A /* TrackerViewController.swift in Sources */,
 				A574758F2A0506AC00CA5E17 /* CreateHabitCell.swift in Sources */,
+				A5364E582A459EA100047725 /* EditTrackerHabitViewController.swift in Sources */,
 				A5C2AE6B29F1449E000AFF07 /* SceneDelegate.swift in Sources */,
+				A5364E5A2A45A02300047725 /* DataForCellHabit.swift in Sources */,
 				A571458D2A25F377002A49BD /* ColorCell.swift in Sources */,
 				A5288E7F2A114F1E0057D30A /* SupplementaryViewCategory.swift in Sources */,
 				A5106D562A2763AF0083ED28 /* ColorAndDayMarshalling.swift in Sources */,
 				A5CBE07029FBBA9A002AA691 /* CreateScheduleViewController.swift in Sources */,
 				A5AEE6772A35B19900383767 /* OnboardingPageView.swift in Sources */,
+				A5C384752A485EB1001F38FA /* Extension type.swift in Sources */,
 				A5CC245129FE605A00D4D03D /* Tracker.swift in Sources */,
 				A57475912A05077A00CA5E17 /* DayCell.swift in Sources */,
 				A56230252A2626D800E0C0A0 /* TrackerStore.swift in Sources */,

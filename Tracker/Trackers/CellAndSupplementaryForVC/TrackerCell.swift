@@ -31,6 +31,10 @@ final class TrackerCell: UICollectionViewCell {
         allElementsOnView.forEach({contentView.addSubview($0)})
         allElementsOnView.forEach({$0.translatesAutoresizingMaskIntoConstraints = false})
         
+        backView.addSubview(name)
+        backView.addSubview(emoji)
+    
+        
         backView.layer.cornerRadius = 16
         name.font = UIFont.systemFont(ofSize: 12)
         name.textColor = .YPWhiteDay

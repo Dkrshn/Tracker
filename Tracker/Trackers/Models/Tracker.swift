@@ -7,10 +7,12 @@
 
 import UIKit
 
-struct Tracker {
+struct Tracker: Equatable {
     let id: UUID
     let name: String
     let emoji: String
     let color: UIColor
     let schedule: [WeekDay]?
+    let oldCategory: String?
+    let isPin: Bool
 }

@@ -44,8 +44,10 @@ final class TrackerStore: NSObject {
             newTracker.id = tracker.id
             newTracker.color = colorAndDayMarshalling.hexString(from: tracker.color)
             newTracker.schedule = colorAndDayMarshalling.dayString(from: tracker.schedule!)
+            newTracker.isPin = tracker.isPin
             category.addToTracker(newTracker)
             try context.save()
+            print("-------------\(try! trackerStoreCategory.readCategory())")
         } else {
             let trackerCoreData = TrackerCoreData(context: context)
             let trackerCategoryCoreData = TrackerCategoryCoreData(context: context)
@@ -54,12 +56,14 @@ final class TrackerStore: NSObject {
             trackerCoreData.id = tracker.id
             trackerCoreData.color = colorAndDayMarshalling.hexString(from: tracker.color)
             trackerCoreData.schedule = colorAndDayMarshalling.dayString(from: tracker.schedule!)
+            trackerCoreData.isPin = tracker.isPin
             trackerCategoryCoreData.nameCategory = category.nameCategory
-            trackerCategoryCoreData.tracker = NSSet(object: trackerCoreData)
             trackerCoreData.trackerCategory = trackerCategoryCoreData
+            trackerCategoryCoreData.tracker = NSSet(object: trackerCoreData)
             try context.save()
             try updateResult()
             try trackerStoreCategory.updateResult()
+            print("-------------\(try! trackerStoreCategory.readCategory())")
         }
     }
     
@@ -102,7 +106,19 @@ final class TrackerStore: NSObject {
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         let trackers = try context.fetch(request)
         if let tracker = trackers.first {
-            tracker.trackerCategory?.nameCategory = "Закрепленные"
+            tracker.oldCategory = tracker.trackerCategory?.nameCategory
+            tracker.isPin = true
+            try context.save()
+            try updateResult()
+        }
+    }
+    
+    func makeUnpinTracker(id: UUID) throws {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        let trackers = try context.fetch(request)
+        if let tracker = trackers.first {
+            tracker.isPin = false
             try context.save()
             try updateResult()
         }

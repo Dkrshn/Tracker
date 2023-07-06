@@ -22,6 +22,12 @@ final class TrackerCell: UICollectionViewCell {
     private var idTracker: UUID?
     private var indexPath: IndexPath?
     
+    private lazy var pinImage: UIImageView = {
+        let pinImageView = UIImageView()
+        pinImageView.image = UIImage(named: "pin")
+        return pinImageView
+    }()
+    
     weak var delegate: TrackerCellDelegate?
     
     override init(frame: CGRect) {
@@ -66,7 +72,7 @@ final class TrackerCell: UICollectionViewCell {
         ])
     }
     
-    func configTrackerCellButtonUI(tracker: Tracker, isCompleted: Bool, indexPath: IndexPath, countDay: Int) {
+    func configTrackerCellButtonUI(tracker: Tracker, isCompleted: Bool, indexPath: IndexPath, countDay: Int, isPin: Bool) {
         self.isCompletedToday = isCompleted
         idTracker = tracker.id
         self.indexPath = indexPath
@@ -78,6 +84,16 @@ final class TrackerCell: UICollectionViewCell {
             buttonPlus.setImage(UIImage(systemName: "plus"), for: .normal)
             buttonPlus.imageView?.tintColor = .YPWhiteDay
             buttonPlus.alpha = 1
+        }
+        if isPin {
+            backView.addSubview(pinImage)
+            pinImage.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                pinImage.topAnchor.constraint(equalTo: backView.topAnchor, constant: 18),
+                pinImage.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -12)
+            ])
+        } else {
+            pinImage.removeFromSuperview()
         }
     }
     

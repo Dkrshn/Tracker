@@ -35,5 +35,15 @@ extension UIColor {
     static var ColorSet16: UIColor { UIColor(named: "ColorSet16") ?? UIColor.purple }
     static var ColorSet17: UIColor { UIColor(named: "ColorSet17") ?? UIColor.purple }
     static var ColorSet18: UIColor { UIColor(named: "ColorSet18") ?? UIColor.green }
+    
+    static let viewBackgroundColor = UIColor.systemBackground
+    
+   static let buttonAddTracker = UIColor { (traits: UITraitCollection) -> UIColor in
+           if traits.userInterfaceStyle == .light {
+               return UIColor.YPBlackDay
+           } else {
+               return UIColor.YPWhiteDay
+           }
+       }
 }
 

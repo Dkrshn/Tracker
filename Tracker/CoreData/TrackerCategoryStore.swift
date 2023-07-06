@@ -65,13 +65,18 @@ final class TrackerCategoryStore: NSObject {
     
     func convertToTrackers(trackerCoreData: [TrackerCoreData]) -> [Tracker] {
         var trackers = [Tracker]()
+        var trackerOldCategory: String?
         trackerCoreData.forEach { tracker in
             guard let trackerID = tracker.id else { return }
             guard let trackerName = tracker.name else { return }
             guard let trackerEmoji = tracker.emoji else { return }
             guard let trackerColor = tracker.color else { return }
             guard let trackerSchedule = tracker.schedule else { return }
-            trackers.append(Tracker(id: trackerID, name: trackerName, emoji: trackerEmoji, color: colorAndDayMarshalling.color(from: trackerColor), schedule: colorAndDayMarshalling.day(from: trackerSchedule)))
+            let trackerIsPin = tracker.isPin
+            if let oldCategory = tracker.oldCategory  {
+                trackerOldCategory = oldCategory
+            }
+            trackers.append(Tracker(id: trackerID, name: trackerName, emoji: trackerEmoji, color: colorAndDayMarshalling.color(from: trackerColor), schedule: colorAndDayMarshalling.day(from: trackerSchedule), oldCategory: trackerOldCategory, isPin: trackerIsPin))
         }
         return trackers
     }

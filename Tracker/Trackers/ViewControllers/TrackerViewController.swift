@@ -22,6 +22,7 @@ class TrackerViewController: UIViewController {
     private var currentDate: Date = Date()
     private let categoryStore = TrackerCategoryStore.shared
     private let recordStore = TrackerRecordStore.shared
+    private var pinnedTrackerCategories = [TrackerCategory]()
     
     
     private let trackerStore = TrackerStore.shared
@@ -34,7 +35,7 @@ class TrackerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .YPWhiteDay
+        view.backgroundColor = .systemBackground
         guard let getCategories = try? categoryStore.readCategory() else { return }
         categories = getCategories
         reloadVisibleCategories()
@@ -57,7 +58,7 @@ extension TrackerViewController {
         addTraker.addTarget(self, action: #selector(addTracker), for: .touchUpInside)
         addTraker.setImage(UIImage(systemName: "plus"), for: .normal)
         addTraker.sizeThatFits(CGSize(width: 19, height: 18))
-        addTraker.tintColor = .YPBlackDay
+        addTraker.tintColor = .buttonAddTracker
         
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
@@ -142,22 +143,54 @@ extension TrackerViewController {
         installDateToCurrent()
         let filterWeekDay = calendar.component(.weekday, from: currentDate)
         let filterText = (searchTextField.text ?? "").lowercased()
-        visibleTrackerCategories = categories.compactMap { category in
-            let tracker = category.trackers.filter { tracker in
-                let textCondition = filterText.isEmpty || tracker.name.lowercased().contains(filterText)
-                let dateCondotion = tracker.schedule?.contains { weekDay in
-                    weekDay.rawValue == filterWeekDay
-                } == true
-                return textCondition && dateCondotion
-            }
-            if tracker.isEmpty {
-                return nil
-            }
-            return TrackerCategory(nameCategory: category.nameCategory, trackers: tracker)
-        }
+        
+//        visibleTrackerCategories = categories.compactMap { category in
+//            let tracker = category.trackers.filter { tracker in
+//                let textCondition = filterText.isEmpty || tracker.name.lowercased().contains(filterText)
+//                let dateCondotion = tracker.schedule?.contains { weekDay in
+//                    weekDay.rawValue == filterWeekDay
+//                } == true
+//                    return textCondition && dateCondotion
+//            }
+//            if tracker.isEmpty {
+//                return nil
+//            }
+//            return TrackerCategory(nameCategory: category.nameCategory, trackers: tracker)
+//        }
+        
+        categories = categories.filter { $0.nameCategory != "Закрепленные" }
+
+        let allTrackers = categories.flatMap { $0.trackers }
+           var pinnedTrackers = [Tracker]()
+           var unpinnedCategories = [TrackerCategory]()
+
+           for category in categories {
+               let newTrackers = category.trackers.filter { tracker in
+                   if tracker.isPin {
+                       pinnedTrackers.append(tracker)
+                       return false
+                   } else {
+                       return true
+                   }
+               }
+               let newCategory = TrackerCategory(nameCategory: category.nameCategory, trackers: newTrackers)
+               unpinnedCategories.append(newCategory)
+           }
+        if !pinnedTrackers.isEmpty {
+               let pinnedCategory = TrackerCategory(nameCategory: "Закрепленные", trackers: pinnedTrackers)
+               unpinnedCategories.insert(pinnedCategory, at: 0)
+           }
+
+           visibleTrackerCategories = unpinnedCategories.filter { category in
+               let filteredTrackers = category.trackers.filter { tracker in
+                   guard filterText.isEmpty || tracker.name.lowercased().contains(filterText) else { return false }
+                   return tracker.schedule?.contains(WeekDay(rawValue: filterWeekDay)!) ?? true
+               }
+               return !filteredTrackers.isEmpty
+           }
+
         makeUI()
         collectionView.reloadData()
-        
     }
     private func installDateToCurrent() {
         currentDate = datePicker.date
@@ -193,7 +226,7 @@ extension TrackerViewController: UICollectionViewDataSource {
         let isCompletedToday = isCompletedTrackerToday(id: tracker.id)
         guard let record = try? recordStore.getRecord() else { return UICollectionViewCell() }
         let countDay = record.filter {$0.trackerId == tracker.id}.count
-        cell.configTrackerCellButtonUI(tracker: tracker, isCompleted: isCompletedToday, indexPath: indexPath, countDay: countDay)
+        cell.configTrackerCellButtonUI(tracker: tracker, isCompleted: isCompletedToday, indexPath: indexPath, countDay: countDay, isPin: tracker.isPin)
         cell.delegate = self
         cell.name.text = "\(visibleTrackerCategories[indexPath.section].trackers[indexPath.row].name)"
         cell.emoji.text = "\(visibleTrackerCategories[indexPath.section].trackers[indexPath.row].emoji)"
@@ -216,8 +249,7 @@ extension TrackerViewController: UICollectionViewDataSource {
         
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: id, for: indexPath) as? SupplementaryViewCategory
         if !visibleTrackerCategories.isEmpty {
-            view?.titleLabel.text = "\(visibleTrackerCategories[indexPath.section].nameCategory)"
-            
+                view?.titleLabel.text = "\(visibleTrackerCategories[indexPath.section].nameCategory)"
         }
         return view!
     }
@@ -240,10 +272,19 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
           
             
             return UIMenu(children: [
-                UIAction(title: "Закрепить") { [weak self] _ in
+                ((self.visibleTrackerCategories[indexPath.section].trackers[indexPath.row].isPin == true) ? UIAction(title: "Открепить") { [weak self] _ in
                     guard let self = self else { return }
-                    self.toFix(indexPath: indexPath)
-                },
+                    self.unPin(indexPath: indexPath)
+                    self.reloadVisibleCategories()
+                } : UIAction(title: "Закрепить") { [weak self] _ in
+                    guard let self = self else { return }
+                    self.toPin(indexPath: indexPath)
+                    self.reloadVisibleCategories()
+                }),
+//                UIAction(title: "Закрепить") { [weak self] _ in
+//                    guard let self = self else { return }
+//                    self.toFix(indexPath: indexPath)
+//                },
                 UIAction(title: "Редактировать") { [weak self] _ in
                     guard let self = self else { return }
                     self.toEdit(indexPath: indexPath)
@@ -265,8 +306,25 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
         return UITargetedPreview(view: cell.backView)
     }
     
-    func toFix(indexPath: IndexPath) {
-        
+    func toPin(indexPath: IndexPath) {
+       try! trackerStore.makeFixTracker(id: visibleTrackerCategories[indexPath.section].trackers[indexPath.row].id)
+        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseInOut]) {
+            guard let getCategories = try? self.categoryStore.readCategory() else { return }
+            self.categories = getCategories
+            self.collectionView.reloadData()
+            self.reloadVisibleCategories()
+        }
+    }
+    
+    func unPin(indexPath: IndexPath) {
+        let unpinTrackerId = visibleTrackerCategories[indexPath.section].trackers[indexPath.row].id
+        try! trackerStore.makeUnpinTracker(id: unpinTrackerId)
+        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseInOut]) {
+            guard let getCategories = try? self.categoryStore.readCategory() else { return }
+            self.categories = getCategories
+            self.collectionView.reloadData()
+            self.reloadVisibleCategories()
+        }
     }
     
     func toEdit(indexPath: IndexPath) {
@@ -307,7 +365,7 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 16
+        return 20
     }
     
     

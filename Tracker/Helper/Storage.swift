@@ -17,7 +17,8 @@ final class Storage {
     func addNewTracker(name: String, emoji: String, color: UIColor, schedule: [WeekDay], category: String) {
         
         let uniqueId = UUID()
-        let newTracker = Tracker(id: uniqueId, name: name, emoji: emoji, color: color, schedule: schedule)
+        let isPin = false
+        let newTracker = Tracker(id: uniqueId, name: name, emoji: emoji, color: color, schedule: schedule, oldCategory: nil, isPin: isPin)
         trackers.append(newTracker)
         let newTrackerCategory = TrackerCategory(nameCategory: category, trackers: trackers)
         try? trackerStore.addNewTracker(newTracker, with: newTrackerCategory)

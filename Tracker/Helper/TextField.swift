@@ -12,7 +12,6 @@ final class TextField: UISearchTextField {
     func setUpTextFieldOnTrackerView() {
         layer.cornerRadius = 10
         textColor = .YPBlackDay
-        layer.backgroundColor = UIColor.YPBackgroundDay.cgColor
         clearButtonMode = .whileEditing
         placeholder = "Поиск"
         font = UIFont.systemFont(ofSize: 17)

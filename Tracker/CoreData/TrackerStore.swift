@@ -44,8 +44,10 @@ final class TrackerStore: NSObject {
             newTracker.id = tracker.id
             newTracker.color = colorAndDayMarshalling.hexString(from: tracker.color)
             newTracker.schedule = colorAndDayMarshalling.dayString(from: tracker.schedule!)
+            newTracker.isPin = tracker.isPin
             category.addToTracker(newTracker)
             try context.save()
+            print("-------------\(try! trackerStoreCategory.readCategory())")
         } else {
             let trackerCoreData = TrackerCoreData(context: context)
             let trackerCategoryCoreData = TrackerCategoryCoreData(context: context)
@@ -54,12 +56,14 @@ final class TrackerStore: NSObject {
             trackerCoreData.id = tracker.id
             trackerCoreData.color = colorAndDayMarshalling.hexString(from: tracker.color)
             trackerCoreData.schedule = colorAndDayMarshalling.dayString(from: tracker.schedule!)
+            trackerCoreData.isPin = tracker.isPin
             trackerCategoryCoreData.nameCategory = category.nameCategory
-            trackerCategoryCoreData.tracker = NSSet(object: trackerCoreData)
             trackerCoreData.trackerCategory = trackerCategoryCoreData
+            trackerCategoryCoreData.tracker = NSSet(object: trackerCoreData)
             try context.save()
             try updateResult()
             try trackerStoreCategory.updateResult()
+            print("-------------\(try! trackerStoreCategory.readCategory())")
         }
     }
     
@@ -72,6 +76,67 @@ final class TrackerStore: NSObject {
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: request)
         try context.execute(deleteRequest)
         try context.save()
+    }
+    
+    
+    //    func getTrackerCategory() -> String {
+    //        guard let trackers = fetchedResultsController.fetchedObjects else { return }
+    //        return 
+    //    }
+    
+    //    private func convertTracker(trackerCoreData: TrackerCoreData) throws -> String {
+    //        guard let categoryCD = trackerCoreData.trackerCategory else { throw
+    //            TrackerCategoryError.decodingErrorInvalidName }
+    //        let categoryTracker = try! trackerStoreCategory.convertCategoryTracker(categoryCoreData: categoryCD)
+    //        return categoryTracker.nameCategory
+    //    }
+    
+    func deleteTracker(id: UUID) throws {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        let trackers = try context.fetch(request)
+        if let traker = trackers.first {
+            context.delete(traker)
+            try context.save()
+        }
+    }
+    
+    func makeFixTracker(id: UUID) throws {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        let trackers = try context.fetch(request)
+        if let tracker = trackers.first {
+            tracker.oldCategory = tracker.trackerCategory?.nameCategory
+            tracker.isPin = true
+            try context.save()
+            try updateResult()
+        }
+    }
+    
+    func makeUnpinTracker(id: UUID) throws {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        let trackers = try context.fetch(request)
+        if let tracker = trackers.first {
+            tracker.isPin = false
+            try context.save()
+            try updateResult()
+        }
+    }
+    
+    func updateTracker(id: UUID, name: String, category: String, schedule: [WeekDay], emoji: String, color: UIColor) throws {
+        let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        let trackers = try context.fetch(request)
+        if let tracker = trackers.first {
+            tracker.name = name
+            tracker.schedule = colorAndDayMarshalling.dayString(from: schedule)
+            tracker.emoji = emoji
+            tracker.color = colorAndDayMarshalling.hexString(from: color)
+            tracker.trackerCategory?.nameCategory = category
+            try context.save()
+            try updateResult()
+        }
     }
 }
 

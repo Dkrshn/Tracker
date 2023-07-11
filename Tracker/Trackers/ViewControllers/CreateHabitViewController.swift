@@ -27,6 +27,7 @@ final class CreateHabitViewController: UIViewController {
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let tableForCreateHabit = UITableView()
+    private let dataForCellHabit = DataForCellHabit.shared
     private let dataForTable = ["Категория", "Расписание"]
     static let shared = CreateHabitViewController()
     private let storage = Storage.shared
@@ -240,7 +241,6 @@ extension CreateHabitViewController: CreateScheduleDelegate {
 extension CreateHabitViewController: CreateCategoryDelegate {
     func createCategory(category: String) {
         self.category = category
-        print("---==========\(category)")
         tableForCreateHabit.reloadData()
         checkFields()
     }

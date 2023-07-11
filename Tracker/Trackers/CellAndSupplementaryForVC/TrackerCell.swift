@@ -21,6 +21,7 @@ final class TrackerCell: UICollectionViewCell {
     private var isCompletedToday: Bool = false
     private var idTracker: UUID?
     private var indexPath: IndexPath?
+    private let analyticsService = AnalyticsService.shared
     
     private lazy var pinImage: UIImageView = {
         let pinImageView = UIImageView()
@@ -39,7 +40,7 @@ final class TrackerCell: UICollectionViewCell {
         
         backView.addSubview(name)
         backView.addSubview(emoji)
-    
+        
         
         backView.layer.cornerRadius = 16
         name.font = UIFont.systemFont(ofSize: 12)
@@ -73,10 +74,11 @@ final class TrackerCell: UICollectionViewCell {
     }
     
     func configTrackerCellButtonUI(tracker: Tracker, isCompleted: Bool, indexPath: IndexPath, countDay: Int, isPin: Bool) {
+        let daysText = String.localizedStringWithFormat(NSLocalizedString("numberOfDay", comment: ""), countDay)
         self.isCompletedToday = isCompleted
         idTracker = tracker.id
         self.indexPath = indexPath
-        daytext.text = "\(countDay) дней"
+        daytext.text = "\(countDay) \(daysText)"
         if isCompletedToday {
             buttonPlus.setImage(UIImage(systemName: "checkmark"), for: .normal)
             buttonPlus.alpha = 0.3
@@ -100,6 +102,7 @@ final class TrackerCell: UICollectionViewCell {
     
     @objc
     func completedTracker() {
+        analyticsService.sendTapByTrack(screen: "Main", item: "Track")
         guard let idTracker = idTracker, let indexPath = indexPath else { return }
         if isCompletedToday {
             delegate?.uncompleteTracker(id: idTracker, indexPath: indexPath)

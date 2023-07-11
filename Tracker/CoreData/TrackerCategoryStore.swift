@@ -54,7 +54,7 @@ final class TrackerCategoryStore: NSObject {
         return trackerCategory
     }
     
-     func convertCategoryTracker(categoryCoreData: TrackerCategoryCoreData) throws -> TrackerCategory {
+    func convertCategoryTracker(categoryCoreData: TrackerCategoryCoreData) throws -> TrackerCategory {
         guard let name = categoryCoreData.nameCategory else { throw
             TrackerCategoryError.decodingErrorInvalidName }
         guard let trackers = categoryCoreData.tracker?.allObjects as? [TrackerCoreData] else { throw

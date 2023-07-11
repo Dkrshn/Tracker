@@ -38,12 +38,28 @@ extension UIColor {
     
     static let viewBackgroundColor = UIColor.systemBackground
     
-   static let buttonAddTracker = UIColor { (traits: UITraitCollection) -> UIColor in
-           if traits.userInterfaceStyle == .light {
-               return UIColor.YPBlackDay
-           } else {
-               return UIColor.YPWhiteDay
-           }
-       }
+    static let blackWhiteColorButton = UIColor { (traits: UITraitCollection) -> UIColor in
+        if traits.userInterfaceStyle == .light {
+            return UIColor.YPBlackDay
+        } else {
+            return UIColor.YPWhiteDay
+        }
+    }
+    
+    static let blackWhiteColorTabBar = UIColor { (traits: UITraitCollection) -> UIColor in
+        if traits.userInterfaceStyle == .light {
+            return UIColor.YPWhiteDay
+        } else {
+            return UIColor.YPBlackDay
+        }
+    }
+    
+    static let calendaraColor = UIColor { (traits: UITraitCollection) -> UIColor in
+        if traits.userInterfaceStyle == .light {
+            return UIColor.YPLightGray
+        } else {
+            return UIColor.YPWhiteDay
+        }
+    }
 }
 

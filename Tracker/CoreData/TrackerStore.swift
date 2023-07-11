@@ -79,17 +79,17 @@ final class TrackerStore: NSObject {
     }
     
     
-//    func getTrackerCategory() -> String {
-//        guard let trackers = fetchedResultsController.fetchedObjects else { return }
-//        return 
-//    }
+    //    func getTrackerCategory() -> String {
+    //        guard let trackers = fetchedResultsController.fetchedObjects else { return }
+    //        return 
+    //    }
     
-//    private func convertTracker(trackerCoreData: TrackerCoreData) throws -> String {
-//        guard let categoryCD = trackerCoreData.trackerCategory else { throw
-//            TrackerCategoryError.decodingErrorInvalidName }
-//        let categoryTracker = try! trackerStoreCategory.convertCategoryTracker(categoryCoreData: categoryCD)
-//        return categoryTracker.nameCategory
-//    }
+    //    private func convertTracker(trackerCoreData: TrackerCoreData) throws -> String {
+    //        guard let categoryCD = trackerCoreData.trackerCategory else { throw
+    //            TrackerCategoryError.decodingErrorInvalidName }
+    //        let categoryTracker = try! trackerStoreCategory.convertCategoryTracker(categoryCoreData: categoryCD)
+    //        return categoryTracker.nameCategory
+    //    }
     
     func deleteTracker(id: UUID) throws {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")

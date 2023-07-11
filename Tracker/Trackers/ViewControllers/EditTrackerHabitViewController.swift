@@ -33,13 +33,11 @@ final class EditTrackerHabitViewController: UIViewController {
     private var visibleDay = ""
     private var nameHabit = ""
     private var finalSchedule = [WeekDay]()
- //   private let categoryStore = TrackerCategoryStore.shared
-  //  private let recordStore = TrackerRecordStore.shared
     private let trackerStore = TrackerStore.shared
     private let colorMarshaling = ColorAndDayMarshalling.shared
     private var indexPathEmojiCell: IndexPath?
     private var indexPathColorCell: IndexPath?
-
+    
     var currentCategory: String
     var currentName: String
     var currentSchedule: [WeekDay]
@@ -321,14 +319,6 @@ extension EditTrackerHabitViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if visibleDay.isEmpty && category.isEmpty {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-//            cell.textLabel?.text = dataForTable[indexPath.row]
-//            cell.backgroundColor = .YPBackgroundDay
-//            cell.accessoryType = .disclosureIndicator
-//            if indexPath.row == 0 {
-//                cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-//            } else {
-//                cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-//            }
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellCustom", for: indexPath) as! CreateHabitCell
@@ -423,7 +413,7 @@ extension EditTrackerHabitViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch collectionView {
         case collectionViewEmoji: guard let cell = collectionView.cellForItem(at: indexPath) as? EmojiCell,
-            let cellEmoji = collectionView.cellForItem(at: indexPathEmojiCell!) as? EmojiCell else { return }
+                                        let cellEmoji = collectionView.cellForItem(at: indexPathEmojiCell!) as? EmojiCell else { return }
             cell.backgroundColor = .YPLightGray
             cellEmoji.backgroundColor = .YPWhiteDay
             cell.layer.cornerRadius = 16

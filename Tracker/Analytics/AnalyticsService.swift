@@ -60,4 +60,10 @@ final class AnalyticsService {
             print("REPORT ERROR: %@", error.localizedDescription)
         })
     }
+    
+    func activate() {
+        guard let configuration = YMMYandexMetricaConfiguration(apiKey: "6a069603-848c-448a-bda3-59d55611b071") else { return }
+        
+        YMMYandexMetrica.activate(with: configuration)
+    }
 }

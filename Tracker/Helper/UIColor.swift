@@ -35,8 +35,18 @@ extension UIColor {
     static var ColorSet16: UIColor { UIColor(named: "ColorSet16") ?? UIColor.purple }
     static var ColorSet17: UIColor { UIColor(named: "ColorSet17") ?? UIColor.purple }
     static var ColorSet18: UIColor { UIColor(named: "ColorSet18") ?? UIColor.green }
+    static let ypGradient01 = UIColor(named: "gradientColor1") ?? UIColor.red
+    static let ypGradient02 = UIColor(named: "gradientColor2") ?? UIColor.green
+    static let ypGradient03 = UIColor(named: "gradientColor3") ?? UIColor.blue
     
-    static let viewBackgroundColor = UIColor.systemBackground
+    
+    static let blackWhiteColor = UIColor { (traits: UITraitCollection) -> UIColor in
+        if traits.userInterfaceStyle == .light {
+            return UIColor.YPWhiteDay
+        } else {
+            return UIColor.YPBlackDay
+        }
+    }
     
     static let blackWhiteColorButton = UIColor { (traits: UITraitCollection) -> UIColor in
         if traits.userInterfaceStyle == .light {

@@ -14,12 +14,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
-        
         let window = UIWindow(windowScene: scene)
-        let onboardingPageView = OnboardingPageView(transitionStyle: UIPageViewController.TransitionStyle.scroll, navigationOrientation: UIPageViewController.NavigationOrientation.horizontal)
-        window.rootViewController = onboardingPageView
-        self.window = window
-        window.makeKeyAndVisible()
+        
+        let isFirstLaunch = !UserDefaults.standard.bool(forKey: "HasLaunchedBefore")
+        
+        if isFirstLaunch {
+            UserDefaults.standard.set(true, forKey: "HasLaunchedBefore")
+            let onboardingPageView = OnboardingPageView(transitionStyle: UIPageViewController.TransitionStyle.scroll, navigationOrientation: UIPageViewController.NavigationOrientation.horizontal)
+            window.rootViewController = onboardingPageView
+            self.window = window
+            window.makeKeyAndVisible()
+            
+        } else {
+            let tabBarView = TabBarViewController()
+            window.rootViewController = tabBarView
+            self.window = window
+            window.makeKeyAndVisible()
+        }
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {

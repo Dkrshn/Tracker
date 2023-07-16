@@ -191,15 +191,8 @@
 		A574758D2A0505A000CA5E17 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				A5CBE06F29FBBA9A002AA691 /* CreateScheduleViewController.swift */,
-				A5BB19122A0257700039414D /* CategoryViewController.swift */,
-				A5DFE74C2A3779D9005BABDD /* CategoryViewModel.swift */,
-				A5DFE74E2A378073005BABDD /* NewCategoryViewController.swift */,
-				A5C3B46129FA852A00B64F47 /* CreateHabitViewController.swift */,
-				A5C3B45F29FA56D600B64F47 /* CreateTrackerViewController.swift */,
-				A50E02982A004E630082FF7A /* TrackerViewController.swift */,
-				A5364E572A459EA100047725 /* EditTrackerHabitViewController.swift */,
-				A557A2EB2A56B69900CEB1D8 /* FilterMenu.swift */,
+				A5DDFC892A5F10C600B11A35 /* Trackers */,
+				A5DDFC882A5F10BB00B11A35 /* Statistics */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -293,9 +286,33 @@
 			isa = PBXGroup;
 			children = (
 				A5D0FFE22A5AEA6000810AA0 /* AnalyticsService.swift */,
-				A550418229F6EF7A0075DA85 /* StatisticsViewController.swift */,
 			);
 			path = Analytics;
+			sourceTree = "<group>";
+		};
+		A5DDFC882A5F10BB00B11A35 /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+				A550418229F6EF7A0075DA85 /* StatisticsViewController.swift */,
+			);
+			name = Statistics;
+			path = ../../..;
+			sourceTree = "<group>";
+		};
+		A5DDFC892A5F10C600B11A35 /* Trackers */ = {
+			isa = PBXGroup;
+			children = (
+				A5CBE06F29FBBA9A002AA691 /* CreateScheduleViewController.swift */,
+				A5BB19122A0257700039414D /* CategoryViewController.swift */,
+				A5DFE74C2A3779D9005BABDD /* CategoryViewModel.swift */,
+				A5DFE74E2A378073005BABDD /* NewCategoryViewController.swift */,
+				A5C3B46129FA852A00B64F47 /* CreateHabitViewController.swift */,
+				A5C3B45F29FA56D600B64F47 /* CreateTrackerViewController.swift */,
+				A50E02982A004E630082FF7A /* TrackerViewController.swift */,
+				A5364E572A459EA100047725 /* EditTrackerHabitViewController.swift */,
+				A557A2EB2A56B69900CEB1D8 /* FilterMenu.swift */,
+			);
+			path = Trackers;
 			sourceTree = "<group>";
 		};
 		A5FDB98E2A5D425B002C2B99 /* Resource */ = {

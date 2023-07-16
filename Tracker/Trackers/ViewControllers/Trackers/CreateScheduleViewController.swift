@@ -97,46 +97,46 @@ extension CreateScheduleViewController {
         return arrayComparableDay.contains(dayForTable)
     }
 }
+
+extension CreateScheduleViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        dataForTable.count
+    }
     
-    extension CreateScheduleViewController: UITableViewDataSource {
-        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            dataForTable.count
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellSchedule", for: indexPath) as! DayCell
+        cell.textLabel?.text = dataForTable[indexPath.row]
+        let chooseDay = isDayChoose(dayForTable: dataForTable[indexPath.row])
+        cell.printSwitch(dayIsChoose: chooseDay)
+        cell.backgroundColor = .YPBackgroundDay
+        cell.delegate = self
+        if indexPath.row == dataForTable.count - 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+        } else {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         }
-        
-        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellSchedule", for: indexPath) as! DayCell
-            cell.textLabel?.text = dataForTable[indexPath.row]
-            let chooseDay = isDayChoose(dayForTable: dataForTable[indexPath.row])
-            cell.printSwitch(dayIsChoose: chooseDay)
-            cell.backgroundColor = .YPBackgroundDay
-            cell.delegate = self
-            if indexPath.row == dataForTable.count - 1 {
-                cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-            } else {
-                cell.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        return cell
+    }
+}
+
+extension CreateScheduleViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 75
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+extension CreateScheduleViewController: WeekdayCellDelegate {
+    func didToggleSwitchView(to isSelected: Bool, day: String) {
+        guard let day = weekDay[day] else { return }
+        if isSelected {
+            schedule.append(day)
+        } else {
+            if let index = schedule.firstIndex(of: day) {
+                schedule.remove(at: index)
             }
-            return cell
         }
     }
-    
-    extension CreateScheduleViewController: UITableViewDelegate {
-        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-            return 75
-        }
-        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            tableView.deselectRow(at: indexPath, animated: true)
-        }
-    }
-    
-    extension CreateScheduleViewController: WeekdayCellDelegate {
-        func didToggleSwitchView(to isSelected: Bool, day: String) {
-            guard let day = weekDay[day] else { return }
-            if isSelected {
-                schedule.append(day)
-            } else {
-                if let index = schedule.firstIndex(of: day) {
-                    schedule.remove(at: index)
-                }
-            }
-        }
-    }
+}

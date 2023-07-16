@@ -33,9 +33,6 @@ class TrackerViewController: UIViewController {
     private let trackersText = NSLocalizedString("Header.main", comment: "Text main header")
     private let filterText = NSLocalizedString("filter", comment: "Text on button filter")
     
-    weak var delegate: TrackerStatisticDelegate?
-    
-    
     private let trackerStore = TrackerStore.shared
     
     private lazy var dateFormatter: DateFormatter = {
@@ -46,8 +43,7 @@ class TrackerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        analyticsService.sendOpenAppEvent(screen: nameScreen)
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .blackWhiteColor
         guard let getCategories = try? categoryStore.readCategory() else { return }
         categories = getCategories
         reloadVisibleCategories()
@@ -58,6 +54,11 @@ class TrackerViewController: UIViewController {
         collectionView.register(TrackerCell.self, forCellWithReuseIdentifier: "cellCollection")
         collectionView.dataSource = self
         collectionView.delegate = self
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        analyticsService.sendOpenAppEvent(screen: nameScreen)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

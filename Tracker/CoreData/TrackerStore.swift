@@ -47,7 +47,6 @@ final class TrackerStore: NSObject {
             newTracker.isPin = tracker.isPin
             category.addToTracker(newTracker)
             try context.save()
-            print("-------------\(try! trackerStoreCategory.readCategory())")
         } else {
             let trackerCoreData = TrackerCoreData(context: context)
             let trackerCategoryCoreData = TrackerCategoryCoreData(context: context)
@@ -63,7 +62,6 @@ final class TrackerStore: NSObject {
             try context.save()
             try updateResult()
             try trackerStoreCategory.updateResult()
-            print("-------------\(try! trackerStoreCategory.readCategory())")
         }
     }
     
@@ -77,19 +75,6 @@ final class TrackerStore: NSObject {
         try context.execute(deleteRequest)
         try context.save()
     }
-    
-    
-    //    func getTrackerCategory() -> String {
-    //        guard let trackers = fetchedResultsController.fetchedObjects else { return }
-    //        return 
-    //    }
-    
-    //    private func convertTracker(trackerCoreData: TrackerCoreData) throws -> String {
-    //        guard let categoryCD = trackerCoreData.trackerCategory else { throw
-    //            TrackerCategoryError.decodingErrorInvalidName }
-    //        let categoryTracker = try! trackerStoreCategory.convertCategoryTracker(categoryCoreData: categoryCD)
-    //        return categoryTracker.nameCategory
-    //    }
     
     func deleteTracker(id: UUID) throws {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")

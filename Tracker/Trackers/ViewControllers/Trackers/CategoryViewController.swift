@@ -17,6 +17,7 @@ final class CategoryViewController: UIViewController {
     static let shared = CategoryViewController()
     weak var delegate: CreateCategoryDelegate?
     private var viewModel: CategoryViewModel?
+    var selectedIndexPath: IndexPath?
     
     private var savedCategory: NSObject?
     
@@ -131,15 +132,9 @@ extension CategoryViewController {
     
     @objc
     func addCategory() {
-        guard let choiceCategory = viewModel?.choiceCategory else { return }
-        if choiceCategory.isEmpty {
-            let createCategory = NewCategoryViewController()
-            createCategory.delegate = self
-            present(createCategory, animated: true)
-        } else {
-            dismiss(animated: true)
-            delegate?.createCategory(category: choiceCategory)
-        }
+        let createCategory = NewCategoryViewController()
+        createCategory.delegate = self
+        present(createCategory, animated: true)
     }
 }
 
@@ -161,17 +156,20 @@ extension CategoryViewController: UITableViewDataSource {
 
 extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         if let cell = tableView.cellForRow(at: indexPath),
            let text = cell.textLabel?.text {
             cell.accessoryType = .checkmark
+            
+            if let selectedIndexPath = selectedIndexPath,
+               let selectedCell = tableView.cellForRow(at: selectedIndexPath) {
+                selectedCell.accessoryType = .none
+            }
+            
+            selectedIndexPath = indexPath
+            
             viewModel?.choiceCategory = text
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) {
-            cell.accessoryType = .none
+            delegate?.createCategory(category: text)
+            dismiss(animated: true)
         }
     }
     

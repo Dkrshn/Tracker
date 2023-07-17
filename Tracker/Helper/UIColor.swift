@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIColor {
-    static var YPBlackDay: UIColor { UIColor(named: "black") ?? UIColor.black }
+    static var YPBlackDay: UIColor { UIColor(named: "YPBlackDay") ?? UIColor.black }
     static var YPBlackNight: UIColor { UIColor(named: "white") ?? UIColor.white }
     static var YPWhiteDay: UIColor { UIColor(named: "white") ?? UIColor.white }
     static var YPWhiteNight: UIColor { UIColor(named: "black") ?? UIColor.black }
@@ -38,14 +38,11 @@ extension UIColor {
     static let ypGradient01 = UIColor(named: "gradientColor1") ?? UIColor.red
     static let ypGradient02 = UIColor(named: "gradientColor2") ?? UIColor.green
     static let ypGradient03 = UIColor(named: "gradientColor3") ?? UIColor.blue
+    static let backgroundColorBlackWhite = UIColor(named: "backgroundColorBlackWhite") ?? UIColor.blue
     
     
     static let blackWhiteColor = UIColor { (traits: UITraitCollection) -> UIColor in
-        if traits.userInterfaceStyle == .light {
-            return UIColor.YPWhiteDay
-        } else {
-            return UIColor.YPBlackDay
-        }
+        return UIColor.backgroundColorBlackWhite
     }
     
     static let blackWhiteColorButton = UIColor { (traits: UITraitCollection) -> UIColor in

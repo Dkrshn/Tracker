@@ -200,12 +200,18 @@ extension TrackerViewController {
             unpinnedCategories.insert(pinnedCategory, at: 0)
         }
         
-        visibleTrackerCategories = unpinnedCategories.filter { category in
+        visibleTrackerCategories = unpinnedCategories.compactMap { category in
             let filteredTrackers = category.trackers.filter { tracker in
-                guard filterText.isEmpty || tracker.name.lowercased().contains(filterText) else { return false }
-                return tracker.schedule?.contains(WeekDay(rawValue: filterWeekDay)!) ?? true
+                let textCondition = filterText.isEmpty || tracker.name.lowercased().contains(filterText)
+                let dateCondotion = tracker.schedule?.contains { weekDay in
+                    weekDay.rawValue == filterWeekDay
+                } == true
+                return textCondition && dateCondotion
             }
-            return !filteredTrackers.isEmpty
+            if filteredTrackers.isEmpty {
+                            return nil
+                        }
+                        return TrackerCategory(nameCategory: category.nameCategory, trackers: filteredTrackers)
         }
         
         makeUI()

@@ -14,11 +14,16 @@ enum TrackerRecordError: Error {
     case decodingErrorInvalidRecord
 }
 
+protocol TrackerRecordDelegate: AnyObject {
+    func updateCountCompletedTracker()
+}
+
 final class TrackerRecordStore: NSObject {
     
     private let colorAndDayMarshalling = ColorAndDayMarshalling.shared
     private let context: NSManagedObjectContext
     private var fetchedResultsController: NSFetchedResultsController<TrackerRecordCoreData>!
+    weak var delegate: TrackerRecordDelegate?
     
     static let shared = TrackerRecordStore()
     
@@ -45,6 +50,7 @@ final class TrackerRecordStore: NSObject {
         record.date = date
         try context.save()
         try updateResult()
+        delegate?.updateCountCompletedTracker()
     }
     
     func getRecord() throws -> [TrackerRecord] {
@@ -78,6 +84,7 @@ final class TrackerRecordStore: NSObject {
         context.delete(record)
         try? context.save()
         try updateResult()
+        delegate?.updateCountCompletedTracker()
     }
     
     func updateResult() throws {

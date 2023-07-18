@@ -23,6 +23,12 @@ final class DayCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func printSwitch(dayIsChoose: Bool) {
+        if dayIsChoose {
+            switchView.isOn = true
+        }
+    }
+    
     @objc
     func didToggleSwitchView(_ sender: UISwitch) {
         if sender.isOn {
